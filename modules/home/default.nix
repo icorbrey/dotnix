@@ -1,0 +1,20 @@
+{
+  imports = [
+    ./cli-common.nix
+    ./discord.nix
+    ./docker.nix
+    ./dotnet.nix
+    ./flatpak.nix
+    ./fonts.nix
+    ./helix.nix
+    ./home-manager.nix
+    ./java.nix
+    ./jujutsu.nix
+    ./langs-common.nix
+    ./nushell
+    ./obsidian.nix
+    ./rust.nix
+    ./steam.nix
+    ./webdev-common.nix
+  ];
+}
