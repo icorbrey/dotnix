@@ -20,6 +20,12 @@
     nushell.enable = true;
     helix.enable = true;
 
+    jujutsu.settings.scopes = [{
+      "--when".repositories = ["~/dev/forks"];
+      git.fetch = "upstream";
+      git.push = "origin";
+    }];
+
     # GUI
     obsidian.enable = true;
     discord.enable = true;
