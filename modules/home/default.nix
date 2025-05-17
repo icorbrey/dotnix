@@ -16,6 +16,7 @@
     ./nushell.nix
     ./obsidian.nix
     ./rust.nix
+    ./starship.nix
     ./steam.nix
     ./webdev-common.nix
     ./wsl-bridge.nix

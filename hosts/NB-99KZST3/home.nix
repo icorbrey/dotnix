@@ -18,6 +18,7 @@
     # CLI applications
     cli-common.enable = true;
     carapace.enable = true;
+    starship.enable = true;
     nushell.enable = true;
     helix.enable = true;
 
