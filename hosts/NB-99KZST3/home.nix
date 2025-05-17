@@ -16,11 +16,18 @@
     helix.enable = true;
 
     jujutsu.enable = true;
-    jujutsu.scopes = [{
-      "--when".repositories = ["~/dev/dib"];
-      user.email = "icorbrey@ntserv.doitbestcorp.com";
-      git.push-bookmark-prefix = "icorbrey/push-";
-    }];
+    jujutsu.scopes = [
+      {
+        "--when".repositories = ["~/dev/forks"];
+        git.fetch = "upstream";
+        git.push = "origin";
+      }
+      {
+        "--when".repositories = ["~/dev/dib"];
+        user.email = "icorbrey@ntserv.doitbestcorp.com";
+        git.push-bookmark-prefix = "icorbrey/push-";
+      }
+    ];
 
     # Language support
     webdev-common.enable = true;
