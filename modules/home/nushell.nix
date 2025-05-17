@@ -21,6 +21,7 @@
         programs.nushell.shellAliases = lib.mkMerge [
           config.modules.home.global.shellAliases
           {
+            # Don't get rid of command outputs
             clear = "clear -k";
           }
         ];
@@ -33,9 +34,6 @@
             exec ${config.programs.nushell.package}/bin/nu
           fi
         '';
-      })
-      (lib.mkIf config.modules.home.jujutsu.enable {
-        home.file.".config/jj/scripts/changelog.nu".source = ./changelog.nu;
       })
     ]);
 }

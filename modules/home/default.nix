@@ -10,9 +10,9 @@
     ./helix.nix
     ./home-manager.nix
     ./java.nix
-    ./jujutsu.nix
+    ./jujutsu
     ./langs-common.nix
-    ./nushell
+    ./nushell.nix
     ./obsidian.nix
     ./rust.nix
     ./steam.nix
