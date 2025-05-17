@@ -5,10 +5,15 @@
 
   home.homeDirectory = "/home/icorbrey";
   home.username = "icorbrey";
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
   
   modules.home = {
     home-manager.enable = true;
+    wsl-bridge.enable = true;
+
+    wsl-bridge.paths = {
+      appData = "/mnt/c/Users/icorbrey/AppData/Roaming";
+    };
 
     # CLI applications
     cli-common.enable = true;
