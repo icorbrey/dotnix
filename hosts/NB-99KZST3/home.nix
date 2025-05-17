@@ -12,6 +12,7 @@
 
     # CLI applications
     cli-common.enable = true;
+    carapace.enable = true;
     nushell.enable = true;
     helix.enable = true;
 

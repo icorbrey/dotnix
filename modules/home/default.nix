@@ -1,5 +1,6 @@
 {
   imports = [
+    ./carapace.nix
     ./cli-common.nix
     ./discord.nix
     ./docker.nix

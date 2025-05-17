@@ -16,6 +16,7 @@
 
     # CLI
     cli-common.enable = true;
+    carapace.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
     helix.enable = true;
