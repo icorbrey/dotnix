@@ -18,5 +18,6 @@
     ./rust.nix
     ./steam.nix
     ./webdev-common.nix
+    ./wsl-bridge.nix
   ];
 }

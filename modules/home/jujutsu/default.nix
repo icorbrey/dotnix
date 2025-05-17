@@ -25,6 +25,10 @@
   config = let jujutsu = config.modules.home.jujutsu;
     in lib.mkIf jujutsu.enable (lib.mkMerge [
       {
+        modules.home.wsl-bridge.map = {
+          "~/.config/jj/config.toml" = { appData, ... }: "${appData}/jj/config.toml";
+        };
+    
         programs.git.enable = true;
 
         programs.jujutsu.enable = true;
