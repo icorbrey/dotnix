@@ -20,6 +20,7 @@
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
+    zellij.enable = true;
     helix.enable = true;
 
     jujutsu.settings.scopes = [{
