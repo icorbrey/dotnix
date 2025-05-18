@@ -19,10 +19,11 @@
     cli-common.enable = true;
     carapace.enable = true;
     starship.enable = true;
+    jujutsu.enable = true;
     nushell.enable = true;
+    zellij.enable = true;
     helix.enable = true;
 
-    jujutsu.enable = true;
     jujutsu.scopes = [
       {
         "--when".repositories = ["~/dev/forks"];

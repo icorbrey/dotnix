@@ -20,5 +20,6 @@
     ./steam.nix
     ./webdev-common.nix
     ./wsl-bridge.nix
+    ./zellij.nix
   ];
 }
