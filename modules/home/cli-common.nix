@@ -23,11 +23,11 @@
           cat = "bat";
         })
         (lib.mkIf cli-common.eza.enable {
-          ls = "eza";
-          ll = "eza -l";
-          la = "eza -a";
-          t = "eza --tree --group-directories-last";
-          tree = "eza --tree --group-directories-last";
+          ls = "eza --icons";
+          ll = "eza -l --icons";
+          la = "eza -a --icons";
+          t = "eza --tree --group-directories-last --icons";
+          tree = "eza --tree --group-directories-last --icons";
         })
       ];
     };
