@@ -41,9 +41,16 @@
             C-A-down = "@vC<esc>";
             C-A-j = "@vC<esc>";
 
+            # Move lines
+            A-J = "@Xdp";
+            A-K = "@XdkP";
+
             # Navigate buffers
             A-pageup = ":bp";
             A-pagedown = ":bn";
+
+            # Find word references
+            F12 = "@miw*;<space>/<ret>";
           };
 
           keys.select = {
@@ -60,6 +67,9 @@
             # Navigate buffers
             A-pageup = "@<esc>:bp";
             A-pagedown = "@<esc>:bn";
+
+            # Find word references
+            F12 = "@miw*;<space>/<ret>";
           };
 
           keys.insert = {
@@ -76,6 +86,9 @@
             # Navigate buffers
             A-pageup = "@<esc>:bp";
             A-pagedown = "@<esc>:bn";
+
+            # Find word references
+            F12 = "@<esc>miw*;<space>/<ret>";
           };
         };
 
