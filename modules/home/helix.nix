@@ -49,6 +49,12 @@
             A-pageup = ":bp";
             A-pagedown = ":bn";
 
+            # Close buffer
+            C-w = ":bc";
+
+            # Close pane
+            C-q = ":q";
+
             # Find word references
             F12 = "@miw*;<space>/<ret>";
           };
