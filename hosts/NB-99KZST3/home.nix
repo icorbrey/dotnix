@@ -13,7 +13,12 @@
 
     wsl-bridge.paths = {
       appData = "/mnt/c/Users/icorbrey/AppData/Roaming";
+      userHome = "/mnt/c/Users/icorbrey";
     };
+
+    # Global configuration
+    global.editor = "hx";
+    global.shell = "nu";
 
     # CLI applications
     cli-common.enable = true;
@@ -24,7 +29,7 @@
     zellij.enable = true;
     helix.enable = true;
 
-    jujutsu.scopes = [
+    jujutsu.settings.scopes = [
       {
         "--when".repositories = ["~/dev/forks"];
         git.fetch = "upstream";

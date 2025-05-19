@@ -62,6 +62,10 @@
         ];
       }
       (lib.mkIf config.modules.home.nushell.enable {
+        modules.home.wsl-bridge.map = {
+          "~/.config/jj/scripts/changelog.nu" = { userHome, ... }: "${userHome}/.config/jj/scripts/changelog.nu";
+        };
+        
         programs.jujutsu.settings = {
           aliases.changelog = ["util" "exec" "nu" "~/.config/jj/scripts/changelog.nu"];
         };
