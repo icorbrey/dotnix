@@ -29,7 +29,7 @@ _init-host hostname:
 # Switch to the Home Manager flake for the given hostname.
 _switch hostname:
     #!/usr/bin/env bash
-    home-manager switch --flake .#{{hostname}}
+    home-manager switch --flake .#{{hostname}} -b backup
 
 # Snapshot the repo in its current state.
 _snapshot:
