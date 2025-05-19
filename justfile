@@ -7,6 +7,9 @@ _default:
 # Snapshot and install the current configuration.
 install hostname=shell('hostname'): _snapshot (_switch hostname)
 
+# Abandon current changes and install the previous configuration.
+revert hostname=shell('hostname'): _abandon (_switch hostname)
+
 # Initialize configuration for the given host.
 init hostname=shell('hostname') force="false": (_check-init hostname force) _snapshot (_init-host hostname) _snapshot
 
@@ -32,3 +35,8 @@ _switch hostname:
 _snapshot:
     #!/usr/bin/env bash
     jj status > /dev/null 2>&1
+
+# Abandon the current commit
+_abandon:
+    #!/usr/bin/env bash
+    jj abandon
