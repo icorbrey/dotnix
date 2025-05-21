@@ -8,7 +8,16 @@
     };
 
     map = lib.mkOption {
-      type = with lib.types; attrsOf (functionTo str);
+      type = with lib.types; attrsOf (submodule {
+        options = {
+          directory = lib.mkOption {
+            type = functionTo str;
+          };
+          filename = lib.mkOption {
+            type = str;
+          };
+        };
+      });
     };
   };
 
@@ -16,8 +25,11 @@
     in lib.mkIf wsl-bridge.enable {
       home.activation.wslBridge = lib.hm.dag.entryAfter ["writeBoundary"]
         (builtins.concatStringsSep "\n"
-          (lib.mapAttrsToList
-            (from: mapTo: "cp ${from} ${mapTo wsl-bridge.paths}")
-            wsl-bridge.map));
+          ((lib.mapAttrsToList
+            (from: { directory, ... }: "mkdir -p ${directory wsl-bridge.paths}")
+            wsl-bridge.map)
+          ++ (lib.mapAttrsToList
+            (from: { directory, filename }: "cp ${from} ${directory wsl-bridge.paths}/${filename}")
+            wsl-bridge.map)));
     };
 }

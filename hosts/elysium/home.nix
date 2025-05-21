@@ -9,11 +9,17 @@
 
   modules.home = {
     home-manager.enable = true;
+    wsl-bridge.enable = true;
+
+    wsl-bridge.paths = {
+      appData = "/mnt/c/Users/icorbrey/AppData/Roaming";
+      userHome = "/mnt/c/Users/icorbrey";
+    };
 
     # Global configuration
     global.editor = "hx";
     global.shell = "nu";
-
+    
     # CLI
     cli-common.enable = true;
     carapace.enable = true;
@@ -28,12 +34,6 @@
       git.fetch = ["origin" "upstream"];
       git.push = "origin";
     }];
-
-    # GUI
-    obsidian.enable = true;
-    discord.enable = true;
-    fonts.enable = true;
-    steam.enable = true;
 
     # Language support
     webdev-common.enable = true;

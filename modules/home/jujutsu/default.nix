@@ -26,7 +26,10 @@
     in lib.mkIf jujutsu.enable (lib.mkMerge [
       {
         modules.home.wsl-bridge.map = {
-          "~/.config/jj/config.toml" = { appData, ... }: "${appData}/jj/config.toml";
+          "~/.config/jj/config.toml" = {
+            directory = { appData, ... }: "${appData}/jj";
+            filename = "config.toml";
+          };
         };
     
         programs.git.enable = true;
@@ -63,7 +66,10 @@
       }
       (lib.mkIf config.modules.home.nushell.enable {
         modules.home.wsl-bridge.map = {
-          "~/.config/jj/scripts/changelog.nu" = { userHome, ... }: "${userHome}/.config/jj/scripts/changelog.nu";
+          "~/.config/jj/scripts/changelog.nu" = {
+            directory = { appData, ... }: "${appData}/jj/scripts";
+            filename = "changelog.nu";
+          };
         };
         
         programs.jujutsu.settings = {
