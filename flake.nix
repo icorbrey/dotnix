@@ -35,6 +35,12 @@
       inherit pkgs;
     };
 
+    # Desktop
+    homeConfigurations.elysium = home-manager.lib.homeManagerConfiguration {
+      modules = [./hosts/elysium/home.nix];
+      inherit extraSpecialArgs pkgs;
+    };
+
     # Personal laptop
     homeConfigurations.zephyr = home-manager.lib.homeManagerConfiguration {
       modules = [./hosts/zephyr/home.nix];

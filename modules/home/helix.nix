@@ -11,8 +11,14 @@
   config = let helix = config.modules.home.helix;
     in lib.mkIf helix.enable {
       modules.home.wsl-bridge.map = {
-        "~/.config/helix/languages.toml" = { appData, ... }: "${appData}/helix/languages.toml";
-        "~/.config/helix/config.toml" = { appData, ... }: "${appData}/helix/config.toml";
+        "~/.config/helix/languages.toml" = {
+          directory = { appData, ... }: "${appData}/helix";
+          filename = "languages.toml";
+        };
+        "~/.config/helix/config.toml" = {
+          directory = { appData, ... }: "${appData}/helix";
+          filename = "config.toml";
+        };
       };
       
       programs.helix = {
