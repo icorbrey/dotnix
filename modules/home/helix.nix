@@ -48,12 +48,13 @@
             C-A-j = "@vC<esc>";
 
             # Move lines
-            A-J = "@Xdp";
-            A-K = "@XdkP";
+            A-j = "@Xdp";
+            A-k = "@XdkP";
 
             # Navigate buffers
-            A-pageup = ":bp";
-            A-pagedown = ":bn";
+            A-q = ":bc";
+            A-h = ":bp";
+            A-l = ":bn";
 
             # Close buffer
             C-w = ":bc";
@@ -76,9 +77,14 @@
             C-A-down = "@C";
             C-A-j = "@C";
 
+            # Move lines
+            A-j = "@<esc>Xdp";
+            A-k = "@<esc>XdkP";
+
             # Navigate buffers
-            A-pageup = "@<esc>:bp";
-            A-pagedown = "@<esc>:bn";
+            A-q = "@<esc>:bc";
+            A-h = "@<esc>:bp";
+            A-l = "@<esc>:bn";
 
             # Find word references
             F12 = "@miw*;<space>/<ret>";
@@ -96,8 +102,9 @@
             C-A-j = "@<esc>vCi";
 
             # Navigate buffers
-            A-pageup = "@<esc>:bp";
-            A-pagedown = "@<esc>:bn";
+            A-q = "@<esc>:bc";
+            A-h = "@<esc>:bp";
+            A-l = "@<esc>:bn";
 
             # Find word references
             F12 = "@<esc>miw*;<space>/<ret>";
