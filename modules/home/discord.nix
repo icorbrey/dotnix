@@ -3,9 +3,7 @@
     enable = lib.mkEnableOption "discord";
   };
 
-  config = lib.mkIf config.modules.home.discord.enable {
-    modules.home.flatpak.apps = [
-      "com.discordapp.Discord"
-    ];
+  config.modules.home.flatpak.apps = {
+    "com.discordapp.Discord".enable = config.modules.home.discord.enable;
   };
 }
