@@ -29,6 +29,13 @@
             (from: { directory, ... }: "mkdir -p ${directory wsl-bridge.paths}")
             wsl-bridge.map)
           ++ (lib.mapAttrsToList
+            (from: { directory, filename }: ''
+              if [ -e ${directory wsl-bridge.paths}/${filename} ]; then
+                chmod +w ${directory wsl-bridge.paths}/${filename}
+              fi
+            '')
+            wsl-bridge.map)
+          ++ (lib.mapAttrsToList
             (from: { directory, filename }: "cp ${from} ${directory wsl-bridge.paths}/${filename}")
             wsl-bridge.map)));
     };

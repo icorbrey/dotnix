@@ -14,29 +14,29 @@ revert hostname=shell('hostname'): _abandon (_switch hostname)
 init hostname=shell('hostname') force="false": (_check-init hostname force) _snapshot (_init-host hostname) _snapshot
 
 _check-init hostname force:
-    #!/usr/bin/env bash
+    #!/bin/bash
     if [ -d "hosts/{{hostname}}" ] && [ "{{force}}" != "true" ]; then
         echo "Error: Host \`{{hostname}}\` already exists. Use \`just init --force=true\` to override." >&2
         exit 1
     fi
 
 _init-host hostname:
-    #!/usr/bin/env bash
+    #!/bin/bash
     mkdir -p hosts/{{hostname}}
     cp templates/hosts/home.nix hosts/{{hostname}}/home.nix
     echo "Host \`{{hostname}}\` initialized. Be sure to update \`./flake.nix\`."
 
 # Switch to the Home Manager flake for the given hostname.
 _switch hostname:
-    #!/usr/bin/env bash
+    #!/bin/bash
     home-manager switch --flake .#{{hostname}} -b backup
 
 # Snapshot the repo in its current state.
 _snapshot:
-    #!/usr/bin/env bash
+    #!/bin/bash
     jj status > /dev/null 2>&1
 
 # Abandon the current commit
 _abandon:
-    #!/usr/bin/env bash
+    #!/bin/bash
     jj abandon
