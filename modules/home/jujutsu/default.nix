@@ -2,6 +2,13 @@
   options.modules.home.jujutsu = {
     enable = lib.mkEnableOption "jujutsu";
 
+    settings.tfvc = {
+      enable = lib.mkEnableOption "tfvc support";
+      url = lib.mkOption {
+        type = with lib.types; str;
+      };
+    };
+
     settings.scopes = lib.mkOption {
       type = with lib.types; listOf attrs;
       default = [];
@@ -64,19 +71,41 @@
           })
         ];
       }
-      (lib.mkIf config.modules.home.nushell.enable {
-        modules.home.wsl-bridge.map = {
-          "~/.config/jj/scripts/changelog.nu" = {
-            directory = { appData, ... }: "${appData}/jj/scripts";
-            filename = "changelog.nu";
+      (lib.mkIf config.modules.home.nushell.enable (lib.mkMerge [
+        {
+          modules.home.wsl-bridge.map = {
+            "~/.config/jj/scripts/changelog.nu" = {
+              directory = { userHome, ... }: "${userHome}/.config/jj/scripts";
+              filename = "changelog.nu";
+            };
+            "~/.config/jj/scripts/review.nu" = {
+              directory = { userHome, ... }: "${userHome}/.config/jj/scripts";
+              filename = "review.nu";
+            };
           };
-        };
         
-        programs.jujutsu.settings = {
-          aliases.changelog = ["util" "exec" "nu" "~/.config/jj/scripts/changelog.nu"];
-        };
+          programs.jujutsu.settings = {
+            aliases.changelog = ["util" "exec" "nu" "~/.config/jj/scripts/changelog.nu"];
+            aliases.review = ["util" "exec" "nu" "~/.config/jj/scripts/review.nu"];
+          };
 
-        home.file.".config/jj/scripts/changelog.nu".source = ./changelog.nu;
-      })
+          home.file.".config/jj/scripts/changelog.nu".source = ./changelog.nu;
+          home.file.".config/jj/scripts/review.nu".source = ./review.nu;
+        }
+        (lib.mkIf jujutsu.settings.tfvc.enable {
+          modules.home.wsl-bridge.map = {
+            "~/.config/jj/scripts/tfvc.nu" = {
+              directory = { userHome, ... }: "${userHome}/.config/jj/scripts";
+              filename = "tfvc.nu";
+            };
+          };
+
+          programs.jujutsu.settings = {
+            aliases.tfvc = ["util" "exec" "nu" "~/.config/jj/scripts/tfvc.nu"];
+          };
+
+          home.file.".config/jj/scripts/tfvc.nu".source = ./tfvc.nu;
+        })
+      ]))
     ]);
 }

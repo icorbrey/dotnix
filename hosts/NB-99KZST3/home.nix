@@ -29,18 +29,23 @@
     zellij.enable = true;
     helix.enable = true;
 
-    jujutsu.settings.scopes = [
-      {
-        "--when".repositories = ["~/dev/forks"];
-        git.fetch = "upstream";
-        git.push = "origin";
-      }
-      {
-        "--when".repositories = ["~/dev/dib"];
-        user.email = "icorbrey@ntserv.doitbestcorp.com";
-        git.push-bookmark-prefix = "icorbrey/push-";
-      }
-    ];
+    jujutsu.settings = {
+      tfvc.enable = true;
+      tfvc.url = "https://dev.azure.com/dibc";
+
+      scopes = [
+        {
+          "--when".repositories = ["~/dev/forks"];
+          git.fetch = "upstream";
+          git.push = "origin";
+        }
+        {
+          "--when".repositories = ["~/dev/dib"];
+          user.email = "icorbrey@ntserv.doitbestcorp.com";
+          git.push-bookmark-prefix = "icorbrey/push-";
+        }
+      ];
+    };
 
     # Language support
     webdev-common.enable = true;
