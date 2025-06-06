@@ -9,6 +9,7 @@
 
   modules.home = {
     home-manager.enable = true;
+    auto-cpufreq.enable = true;
 
     # Global configuration
     global.editor = "hx";
@@ -38,6 +39,7 @@
     # Language support
     webdev-common.enable = true;
     langs-common.enable = true;
+    docker.enable = true;
     rust.enable = true;
   };
 }
