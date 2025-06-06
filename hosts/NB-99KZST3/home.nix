@@ -43,6 +43,9 @@
         }
       ];
 
+      signing.key = "~/.ssh/id_rsa.pub";
+      signing.enable = true;
+
       tfvc.enable = true;
       tfvc.url = "https://dev.azure.com/dibc";
     };

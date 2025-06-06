@@ -20,6 +20,18 @@
         }
       ];
     };
+
+    settings.signing = {
+      enable = lib.mkOption {
+        type = with lib.types; bool;
+        default = true;
+      };
+
+      key = lib.mkOption {
+        type = with lib.types; str;
+      };
+    };
+    
     settings.tfvc = {
       enable = lib.mkEnableOption "tfvc support";
       url = lib.mkOption {
@@ -50,11 +62,6 @@
             ui.editor = "hx";
 
             git.write-change-id-header = true;
-            git.sign-on-push = true;
-
-            signing.key = "~/.ssh/id_rsa.pub";
-            signing.behavior = "drop";
-            signing.backend = "ssh";
 
             revset-aliases = {
               "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine()) ~ bookmarks(glob:'review/*@origin')";
@@ -89,6 +96,13 @@
             review.wip-prefix = "wip/";
             review.review-prefix = "review/";
           }
+          (lib.mkIf jujutsu.settings.signing.enable {
+            git.sign-on-push = true;
+
+            signing.key = jujutsu.settings.signing.key;
+            signing.behavior = "drop";
+            signing.backend = "ssh";
+          })
           (lib.mkIf (jujutsu.settings.scopes != []) {
             "--scope" = jujutsu.settings.scopes;
           })
