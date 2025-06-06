@@ -2,6 +2,7 @@
   inputs.nur.overlays.default
 
   (final: prev: {
-    helix = inputs.helix.packages.${prev.system}.default;
+    auto-cpufreq = inputs.auto-cpufreq.packages.${prev.system}.default;
+    # helix = inputs.helix.packages.${prev.system}.default;
   })
 ]

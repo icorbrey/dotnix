@@ -9,6 +9,7 @@
 
   modules.home = {
     home-manager.enable = true;
+    auto-cpufreq.enable = true;
 
     # Global configuration
     global.editor = "hx";
@@ -23,11 +24,16 @@
     zellij.enable = true;
     helix.enable = true;
 
-    jujutsu.settings.scopes = [{
-      "--when".repositories = ["~/dev/forks"];
-      git.fetch = ["origin" "upstream"];
-      git.push = "origin";
-    }];
+    jujutsu.settings = {
+      scopes = [{
+        "--when".repositories = ["~/dev/forks"];
+        git.fetch = ["origin" "upstream"];
+        git.push = "origin";
+      }];
+
+      signing.key = "~/.ssh/id_ed25519.pub";
+      signing.enable = true;
+    };
 
     # GUI
     obsidian.enable = true;
@@ -38,6 +44,7 @@
     # Language support
     webdev-common.enable = true;
     langs-common.enable = true;
+    docker.enable = true;
     rust.enable = true;
   };
 }

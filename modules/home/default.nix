@@ -1,5 +1,6 @@
 {
   imports = [
+    ./auto-cpufreq.nix
     ./carapace.nix
     ./cli-common.nix
     ./discord.nix
