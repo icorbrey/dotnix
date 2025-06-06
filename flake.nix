@@ -1,4 +1,7 @@
 {
+  inputs.auto-cpufreq.url = "github:AdnanHodzic/auto-cpufreq";
+  inputs.auto-cpufreq.inputs.nixpkgs.follows = "nixpkgs";
+
   # inputs.helix.url = "github:icorbrey-contrib/helix/feat/bufferline-context";
   # inputs.helix.inputs.nixpkgs.follows = "nixpkgs";
   
