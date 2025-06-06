@@ -2,13 +2,6 @@
   options.modules.home.jujutsu = {
     enable = lib.mkEnableOption "jujutsu";
 
-    settings.tfvc = {
-      enable = lib.mkEnableOption "tfvc support";
-      url = lib.mkOption {
-        type = with lib.types; str;
-      };
-    };
-
     settings.scopes = lib.mkOption {
       type = with lib.types; listOf attrs;
       default = [];
@@ -26,6 +19,12 @@
           ui.pager = "delta";
         }
       ];
+    };
+    settings.tfvc = {
+      enable = lib.mkEnableOption "tfvc support";
+      url = lib.mkOption {
+        type = with lib.types; str;
+      };
     };
   };
 

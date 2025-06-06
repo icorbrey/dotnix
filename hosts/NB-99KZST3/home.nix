@@ -30,9 +30,6 @@
     helix.enable = true;
 
     jujutsu.settings = {
-      tfvc.enable = true;
-      tfvc.url = "https://dev.azure.com/dibc";
-
       scopes = [
         {
           "--when".repositories = ["~/dev/forks"];
@@ -45,6 +42,9 @@
           git.push-bookmark-prefix = "icorbrey/push-";
         }
       ];
+
+      tfvc.enable = true;
+      tfvc.url = "https://dev.azure.com/dibc";
     };
 
     # Language support
