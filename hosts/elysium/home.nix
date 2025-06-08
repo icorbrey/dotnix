@@ -17,8 +17,8 @@
     };
 
     # Global configuration
+    global.shell = "fish";
     global.editor = "hx";
-    global.shell = "nu";
     
     # CLI
     cli-common.enable = true;
@@ -28,6 +28,7 @@
     nushell.enable = true;
     zellij.enable = true;
     helix.enable = true;
+    fish.enable = true;
 
     jujutsu.settings = {
       scopes = [{
