@@ -12,14 +12,21 @@
   };
 
   config = let webdev-common = config.modules.home.webdev-common;
-    in lib.mkIf webdev-common.enable {
-      home.packages = utils.mkIfOptions webdev-common {
-        javascript = pkgs.vscode-langservers-extracted;
-        typescript = pkgs.typescript-language-server;
-        svelte = pkgs.svelte-language-server;
-        astro = pkgs.astro-language-server;
-        vue = pkgs.vue-language-server;
-        fnm = pkgs.fnm;
-      };
-    };
+    in lib.mkIf webdev-common.enable (lib.mkMerge [
+      {
+        home.packages = utils.mkIfOptions webdev-common {
+          javascript = pkgs.vscode-langservers-extracted;
+          typescript = pkgs.typescript-language-server;
+          svelte = pkgs.svelte-language-server;
+          astro = pkgs.astro-language-server;
+          vue = pkgs.vue-language-server;
+          fnm = pkgs.fnm;
+        };
+      }
+      (lib.mkIf (config.modules.home.fish.enable && webdev-common.fnm.enable) {
+        programs.fish.interactiveShellInit = ''
+          fnm env --use-on-cd --shell fish | source
+        '';
+      })
+    ]);
 }

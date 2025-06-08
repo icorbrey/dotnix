@@ -6,6 +6,7 @@
     ./discord.nix
     ./docker.nix
     ./dotnet.nix
+    ./fish.nix
     ./flatpak.nix
     ./fonts.nix
     ./global.nix
