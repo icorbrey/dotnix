@@ -53,6 +53,7 @@
             git.write-change-id-header = true;
 
             revset-aliases = {
+              "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine()) ~ bookmarks(glob:'review/*@origin')";
               "closest_bookmark(to)" = "heads(::to & bookmarks())";
               "closest_pushable(to)" = "heads(::to & ~description(exact:'') & (~empty() | merges()))";
             };
@@ -62,9 +63,27 @@
             template-aliases = {
               "format_short_signature(signature)" = "coalesce(signature.name(), coalesce(signature.email(), email_placeholder))";
               "format_timestamp(timestamp)" = "timestamp.ago()";
+              "format_short_commit_header(commit)" = ''
+                separate(" ",
+                  format_short_change_id_with_hidden_and_divergent_info(commit),
+                  format_short_signature(commit.author()),
+                  format_timestamp(commit_timestamp(commit)),
+                  commit.bookmarks().filter(|b| !b.name().starts_with("review/")),
+                  commit.tags(),
+                  commit.working_copies(),
+                  if(commit.git_head(), label("git_head", "git_head()")),
+                  format_short_commit_id(commit.commit_id()),
+                  if(commit.conflict(), label("conflict", "conflict")),
+                  if(config("ui.show-cryptographic-signatures").as_boolean(),
+                    format_short_cryptographic_signature(commit.signature())),
+                )
+              '';
             };
 
             jjj.splash.skip = true;
+
+            # review.wip_prefix = "wip/";
+            # review.review_prefix = "review/";
           }
           (lib.mkIf (jujutsu.settings.scopes != []) {
             "--scope" = jujutsu.settings.scopes;
