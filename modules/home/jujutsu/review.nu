@@ -17,7 +17,18 @@ export def main [] {
 # - `review.wip-prefix`: The prefix used for WIP branches (default `wip/`)
 # - `review.review-prefix`: The prefix used for review branches (default ``)
 export def "main diff" [] {
-  jj interdiff -f (review_ref) -t (wip_ref)
+  let review_ref = (review_ref) + "@origin"
+  let wip_ref = wip_ref
+
+  let review_commit_id = commit_id_at $review_ref
+  let wip_commit_id = commit_id_at $wip_ref
+
+  if $wip_commit_id == $review_commit_id {
+    echo "Review ref is at WIP ref."
+    return
+  }
+  
+  jj interdiff -f $review_commit_id -t $wip_commit_id
 }
 
 # Publish your changes to be reviewed.
@@ -30,8 +41,8 @@ export def "main publish" [] {
   let review_ref = review_ref
   let wip_ref = wip_ref
   
-  jj bookmark track $review_ref + "@origin"
-  let old_commit_id = jj log -r $review_ref -T "commit_id"
+  jj bookmark track ($review_ref + "@origin")
+  let old_commit_id = commit_id_at $review_ref
   
   # Move the review ref to the wip ref and push it to the remote
   jj bookmark set $review_ref -r $wip_ref --allow-backwards
@@ -42,8 +53,12 @@ export def "main publish" [] {
   jj bookmark forget $review_ref
 }
 
+def commit_id_at [revset: string] {
+  jj log -r $revset -T "commit_id" --no-graph --no-pager
+}
+
 def "config-get" [key: string, default: string] {
-  (jj config get $key err> null-device
+  (jj config get $key err> (null-device)
     | str trim
     | default -e $default)
 }
