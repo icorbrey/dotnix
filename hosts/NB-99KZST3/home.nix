@@ -36,7 +36,7 @@
       scopes = [
         {
           "--when".repositories = ["~/dev/forks"];
-          git.fetch = "upstream";
+          git.fetch = ["origin" "upstream"];
           git.push = "origin";
         }
         {
