@@ -82,8 +82,8 @@
 
             jjj.splash.skip = true;
 
-            # review.wip_prefix = "wip/";
-            # review.review_prefix = "review/";
+            review.wip_prefix = "wip/";
+            review.review_prefix = "review/";
           }
           (lib.mkIf (jujutsu.settings.scopes != []) {
             "--scope" = jujutsu.settings.scopes;
