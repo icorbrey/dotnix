@@ -51,6 +51,11 @@
             ui.editor = "hx";
 
             git.write-change-id-header = true;
+            git.sign-on-push = true;
+
+            signing.key = "~/.ssh/id_rsa.pub";
+            signing.behavior = "drop";
+            signing.backend = "ssh";
 
             revset-aliases = {
               "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine()) ~ bookmarks(glob:'review/*@origin')";
@@ -82,8 +87,8 @@
 
             jjj.splash.skip = true;
 
-            review.wip_prefix = "wip/";
-            review.review_prefix = "review/";
+            review.wip-prefix = "wip/";
+            review.review-prefix = "review/";
           }
           (lib.mkIf (jujutsu.settings.scopes != []) {
             "--scope" = jujutsu.settings.scopes;

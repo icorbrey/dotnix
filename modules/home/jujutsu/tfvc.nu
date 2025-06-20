@@ -1,4 +1,5 @@
 use std/log
+use std null-device
 
 # Commands for working with TFVC remotes.
 export def main [] {
@@ -16,22 +17,27 @@ def coalesce_tfs_url [url?: string] {
     })
 }
 
+def "jj snapshot" [] {
+  jj status o+e> (null-device) 
+}
+
 # Clone a repository from TFS as a colocated Jujutsu repository.
-#
-# You may want to consider using `jj tfvc clone quick`. This command will
-# likely take a very long time to execute, as it fetches every changeset in the
-# given repository individually and converts it into a commit. Use this if
-# you're planning on fetching the full history for reference purposes, or if
-# you're converting the repository to Git.
 export def "main clone" [
-  path: string,        # The path in TFS to clone from
-  destination: string, # The directory to place the repository in
-  --url: string,       # The URL to use for the TFS server
+  path: string,         # The path in TFS to clone from
+  destination?: string, # The directory to place the repository in
+  --url: string,        # The URL of the TFS server to talk to
+  --full-history,       # Clone the full change history rather than just the latest changeset. This will take a LONG time.
 ] {
   let tfs_url = coalesce_tfs_url $url
+  let dest = $destination | default ($path | path basename)
 
-  git tfs clone $tfs_url $path $destination
-  cd $destination
+  if $full_history {
+    git tfs clone $tfs_url $path $dest
+  } else {
+    git tfs quick-clone $tfs_url $path $dest
+  }
+
+  cd $dest
   jj git init --colocate
 }
 
@@ -43,46 +49,22 @@ export def "main clone list" [
   git tfs list-remote-branches $tfs_url
 }
 
-# Quick-clone a repository from TFS as a colocated Jujutsu repository.
-#
-# This only converts the latest changeset in the path into a commit, which is
-# not great for historical purposes but does take _significantly_ less time
-# than a full clone.
-export def "main clone quick" [
-  path: string,        # The path in TFS to clone from
-  destination: string, # The directory to place the repository in
-  --url: string,       # The URL to use for the TFS server
-  --changeset (-c): number, # Specify a changeset to clone from
-  --no-branches
-] {
-  let tfs_url = coalesce_tfs_url $url
-
-  git tfs quick-clone $tfs_url $path $destination
-  cd $destination
-  jj git init --colocate
-}
-
-# [WIP] Fetch the latest changes from TFS.
+# Fetch the latest changes from TFS.
 export def "main fetch" [
   --no-branches
 ] {
-  jj git export
   git tfs fetch
-  jj git import
+  jj snapshot
 }
-
-# [WIP] Check in your changes as a series of changesets.
-export def "main push" [
-  --message (-m): string, # The message to check in changes with
-  --squash,               # Squash all changes into a single changeset
+ 
+# Check in this branch as an approved changeset.
+export def "main approve" [
+  --revision (-r): string, # The revision to identify the branch with. Defaults to @.
 ] {
-  jj git export
-  git tfs ...([
-    (if $squash { "checkin" } else { "rcheckin" })
-    (if $message != null { [ -m $message ] } else { null })
-
-  ] | compact | flatten)
-  jj git import
+  let change_id = $revision | default '@'
+  jj squash -f $"reachable\(($change_id), trunk\()+..)" -t $"reachable\(($change_id), trunk\()+::) & trunk\()+"
+  git tfs rcheckin
+  jj snapshot
 }
 
 # Commands for working with TFVC shelvesets.
@@ -90,13 +72,12 @@ export def "main shelveset" [] {
   help main shelveset
 }
 
-# [WIP] Delete a shelveset.
+# Delete a shelveset.
 export def "main shelveset delete" [
   descriptor: string, # The unique descriptor for your shelveset
 ] {
-  jj git export
   git tfs shelve-delete $descriptor
-  jj git import
+  jj snapshot
 }
 
 # 
@@ -105,21 +86,19 @@ export def "main shelveset import" [
   bookmark: string,    # The bookmark to point at this shelveset
   --user (-u): string, # The user who owns this shelveset
 ] {
-  jj git export
-  git tfs unshelve $descriptor $bookmark ([
+  git tfs unshelve $descriptor $bookmark ...([
     (if $user != null { [ $"-u=($user)" ] } else { null })
   ])
-  jj git import
+  jj snapshot
 }
 
 export def "main shelveset list" [
   --all-users (-a), # List shelvesets from all users
 ] {
-  jj git export
   git tfs shelve-list ...([
     (if $all_users { [ -u=all ] } else { null })
   ] | compact | flatten)
-  jj git import
+  jj snapshot
 }
 
 # Creates a TFVC shelveset from a Jujutsu bookmark.
@@ -134,9 +113,8 @@ export def "main shelveset push" [
     })
   }
 
-  jj git export
-  git tfs shelve $descriptor ([
-    ($bookmark | default (if $change {
+  git tfs shelve $descriptor ...([
+    ($bookmark | default (if $change != null {
       let prefix = (jj config get git.push-bookmark-prefix)
       let change_id = (jj log --no-graph --color never -r $change -T "change_id.shortest(12)")
       [ $prefix + $change_id ]
@@ -144,6 +122,6 @@ export def "main shelveset push" [
       null
     })
   )  ] | compact | flatten)
-  jj git import
+  jj snapshot
 }
 
