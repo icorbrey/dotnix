@@ -5,6 +5,7 @@
     bat = utils.mkToggle "bat" true;
     eza = utils.mkToggle "eza" true;
     just = utils.mkToggle "just" true;
+    zoxide = utils.mkToggle "zoxide" true;
   };
 
   config = let cli-common = config.modules.home.cli-common;
@@ -12,6 +13,7 @@
       programs = {
         bat.enable = cli-common.bat.enable;
         eza.enable = cli-common.eza.enable;
+        zoxide.enable = cli-common.zoxide.enable;
       };
 
       home.packages = utils.mkIfOptions cli-common {
@@ -28,6 +30,10 @@
           la = "eza -a --icons";
           t = "eza --tree --group-directories-last --icons";
           tree = "eza --tree --group-directories-last --icons";
+        })
+        (lib.mkIf cli-common.zoxide.enable {
+          cd = "z";
+          cdi = "zi";
         })
       ];
     };
