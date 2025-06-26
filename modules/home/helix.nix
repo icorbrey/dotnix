@@ -1,4 +1,4 @@
-{ config, lib, ... }: {
+{ config, lib, pkgs, ... }: {
   options.modules.home.helix = {
     enable = lib.mkEnableOption "helix";
 
@@ -20,6 +20,10 @@
           filename = "config.toml";
         };
       };
+
+      home.packages = [
+        pkgs.steel
+      ];
       
       programs.helix = {
         enable = true;
@@ -112,11 +116,23 @@
         };
 
         languages = {
-          language = [{
-            name = "sql";
-            indent.tab-width = 4;
-            indent.unit = "    ";
-          }];
+          language = let
+            def = name: obj: { inherit name; } // obj;
+          in [
+            (def "markdown" {
+              rulers = [81];
+            })
+            (def "sql" {
+              indent.tab-width = 4;
+              indent.unit = "    ";
+            })
+            (def "git-commit" {
+              rulers = [73];
+            })
+            (def "jjdescription" {
+              rulers = [73];
+            })
+          ];
         };
       };
     };

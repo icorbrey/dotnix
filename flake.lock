@@ -41,6 +41,28 @@
         "type": "github"
       }
     },
+    "helix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1754580139,
+        "narHash": "sha256-zPaXVDTixAurcqBNYWzbx8HT7TqvjRw8RoX90Uk5XuI=",
+        "owner": "icorbrey",
+        "repo": "helix",
+        "rev": "2a22060cae2bb658bc9d79a1c67e724b9983a152",
+        "type": "github"
+      },
+      "original": {
+        "owner": "icorbrey",
+        "ref": "custom",
+        "repo": "helix",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -116,9 +138,31 @@
     "root": {
       "inputs": {
         "auto-cpufreq": "auto-cpufreq",
+        "helix": "helix",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nur": "nur"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "helix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740623427,
+        "narHash": "sha256-3SdPQrZoa4odlScFDUHd4CUPQ/R1gtH4Mq9u8CBiK8M=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "d342e8b5fd88421ff982f383c853f0fc78a847ab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "treefmt-nix": {
