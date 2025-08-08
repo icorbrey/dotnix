@@ -40,7 +40,6 @@
         {
           "--when".repositories = ["~/dev/dib"];
           user.email = "icorbrey@ntserv.doitbestcorp.com";
-          git.push-bookmark-prefix = "icorbrey/push-";
         }
       ];
 
