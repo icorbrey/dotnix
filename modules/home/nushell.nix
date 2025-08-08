@@ -16,6 +16,10 @@
             | append /usr/bin/env
 
           $env.EDITOR = "${config.modules.home.global.editor}"
+
+          # Prevent scroll-on-type bug: https://github.com/nushell/nushell/issues/5585
+          let isWsl = (sys host | get kernel_version) =~ '(microsoft-)\S+(-WSL)\S+$'
+          $env.config.shell_integration.osc133 = (not $isWsl)
         '';
 
         programs.nushell.shellAliases = lib.mkMerge [
