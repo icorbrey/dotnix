@@ -139,6 +139,7 @@
 
           programs.jujutsu.settings = {
             aliases.tfvc = ["util" "exec" "nu" "~/.config/jj/scripts/tfvc.nu"];
+            tfvc.url = jujutsu.settings.tfvc.url;
           };
 
           home.file.".config/jj/scripts/tfvc.nu".source = ./tfvc.nu;

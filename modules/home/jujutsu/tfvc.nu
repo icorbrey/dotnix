@@ -1,24 +1,8 @@
 use std/log
-use std null-device
 
 # Commands for working with TFVC remotes.
 export def main [] {
   help main
-}
-
-const tfs_url_key = "tfvc.url";
-
-def coalesce_tfs_url [url?: string] {
-  $url
-    | default (jj config get $tfs_url_key)
-    | default (error make {
-      msg: "No TFS server URL was provided.",
-      help: "Either add e.g. `--url https://example.com` or run `jj config set --user tfvc.url https://example.com`.",
-    })
-}
-
-def "jj snapshot" [] {
-  jj status o+e> (null-device) 
 }
 
 # Clone a repository from TFS as a colocated Jujutsu repository.
@@ -67,6 +51,49 @@ export def "main approve" [
   jj snapshot
 }
 
+# Check in the given ref.
+export def "main changeset push" [
+  --bookmark (-b): string, # The bookmark to push as a changeset
+  --change (-c): string, # The change ID to push as a changeset
+] {
+  if $bookmark != null and $change != null {
+    return (error make {
+      msg: "--bookmark (-b) and --change (-c) cannot be used at the same time.",
+    })
+  }
+
+  if $bookmark == null and $change == null {
+    return (error make {
+      msg: "Must specify a bookmark (via --bookmark or -b) or a revision (via --change or -c) to shelve.",
+    })
+  }
+
+  let ref = if $bookmark != null {
+    if not (jj revision exists $bookmark) {
+      return (error make {
+        msg: $"Bookmark ($bookmark) does not exist."
+      })
+    }
+
+    $bookmark
+  } else {
+    if not (jj revision exists $change) {
+      return (error make {
+        msg: $"Change ID ($change) does not exist or is ambiguous.",
+      })
+    }
+
+    $change
+  }
+
+  let current = (jj log -r @ -T 'change_id' --no-graph --color=never) | complete | get stdout
+  jj bookmark set -r $current $current
+  jj new -r $ref --ignore-working-copy
+  git tfs checkin
+  jj edit $current
+  jj bookmark forget $current
+}
+
 # Commands for working with TFVC shelvesets.
 export def "main shelveset" [] {
   help main shelveset
@@ -74,19 +101,18 @@ export def "main shelveset" [] {
 
 # Delete a shelveset.
 export def "main shelveset delete" [
-  descriptor: string, # The unique descriptor for your shelveset
+  bookmark: string, # The unique descriptor for your shelveset
 ] {
-  git tfs shelve-delete $descriptor
+  git tfs shelve-delete $bookmark
   jj snapshot
 }
 
 # 
 export def "main shelveset import" [
-  descriptor: string,  # The unique descriptor for the shelveset
   bookmark: string,    # The bookmark to point at this shelveset
   --user (-u): string, # The user who owns this shelveset
 ] {
-  git tfs unshelve $descriptor $bookmark ...([
+  git tfs unshelve $bookmark $bookmark ...([
     (if $user != null { [ $"-u=($user)" ] } else { null })
   ])
   jj snapshot
@@ -103,7 +129,6 @@ export def "main shelveset list" [
 
 # Creates a TFVC shelveset from a Jujutsu bookmark.
 export def "main shelveset push" [
-  descriptor: string,      # The unique descriptor for your shelveset.
   --bookmark (-b): string, # Push only this bookmark.
   --change (-c): string,   # Push this shelveset by creating a bookmark based on its change ID.
 ] {
@@ -113,15 +138,63 @@ export def "main shelveset push" [
     })
   }
 
-  git tfs shelve $descriptor ...([
-    ($bookmark | default (if $change != null {
-      let prefix = (jj config get git.push-bookmark-prefix)
-      let change_id = (jj log --no-graph --color never -r $change -T "change_id.shortest(12)")
-      [ $prefix + $change_id ]
-    } else {
-      null
+  if $bookmark != null {
+    if not (jj revision exists $bookmark) {
+      return (error make {
+        msg: $"Bookmark ($bookmark) does not exist."
+      })
+    }
+
+    git tfs shelve $bookmark $bookmark -f
+    jj snapshot
+  } else if $change != null {
+    if not (jj revision exists $change) {
+      return (error make {
+        msg: $"Change ID ($change) does not exist or is ambiguous.",
+      })
+    }
+
+    let prefix = (jj config get git.push-bookmark-prefix)
+    let change_id = (jj log --no-graph --color never -r $change -T "change_id.shortest(12)")
+    let bookmark = $prefix + $change_id
+
+    jj bookmark set $bookmark -r $change
+    git tfs shelve $bookmark $bookmark -f
+    jj snapshot
+  } else {
+    return (error make {
+      msg: "Must specify a bookmark (via --bookmark or -b) or a revision (via --change or -c) to shelve.",
     })
-  )  ] | compact | flatten)
-  jj snapshot
+  }
 }
 
+const tfs_url_key = "tfvc.url";
+
+def coalesce_tfs_url [url?: string] {
+  let result = $url | default (
+    jj config get $tfs_url_key
+      | split row '\n'
+      | get 0
+      | str trim
+  )
+
+  if $result != null {
+    return $result
+  }
+
+  error make {
+    msg: "No TFS server URL was provided.",
+    help: "Either add e.g. `--url https://example.com` or run `jj config set --user tfvc.url https://example.com`.",
+  }
+}
+
+def "jj revision exists" [
+  revision: string # The revision to test for existence
+] {
+  (jj log -r $revision | complete | get exit_code) == 0
+}
+
+def "jj snapshot" [] {
+  jj status | complete 
+  return null
+}
