@@ -7,6 +7,10 @@
     in lib.mkIf fish.enable (lib.mkMerge [
       {
         programs.fish.enable = true;
+        programs.fish.interactiveShellInit = ''
+          set fish_greeting
+          set -gx EDITOR ${config.modules.home.global.editor}
+        '';
         programs.fish.shellAliases = lib.mkMerge [
           config.modules.home.global.shellAliases
           { clear = "clear -x"; } # Don't get rid of command outputs
