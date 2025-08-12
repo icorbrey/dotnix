@@ -7,6 +7,9 @@ _default:
 # Snapshot and install the current configuration.
 install hostname=shell('hostname'): _snapshot (_switch hostname)
 
+# Update the flake's input and install the current configuration.
+update hostname=shell('hostname'): _update _snapshot (_switch hostname)
+
 # Abandon current changes and install the previous configuration.
 revert hostname=shell('hostname'): _abandon (_switch hostname)
 
@@ -29,6 +32,9 @@ revert hostname=shell('hostname'): _abandon (_switch hostname)
 # Switch to the Home Manager flake for the given hostname.
 _switch hostname:
     @home-manager switch --flake .#{{hostname}} -b backup
+
+_update:
+    @nix flake update
 
 # Snapshot the repo in its current state.
 _snapshot:
