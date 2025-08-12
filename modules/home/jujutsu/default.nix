@@ -62,7 +62,6 @@
             ui.editor = "hx";
 
             git.write-change-id-header = true;
-            git.push-bookmark-prefix = "icorbrey/push-";
 
             revset-aliases = {
               "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine()) ~ bookmarks(glob:'review/*@origin')";
@@ -71,6 +70,8 @@
             };
 
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
+
+            templates.git_push_bookmark = "icorbrey/push-";
         
             template-aliases = {
               "format_short_signature(signature)" = "coalesce(signature.name(), coalesce(signature.email(), email_placeholder))";
