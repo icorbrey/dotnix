@@ -39,6 +39,7 @@
     # GUI
     obsidian.enable = true;
     discord.enable = true;
+    wayland.enable = true;
     fonts.enable = true;
     steam.enable = true;
 
