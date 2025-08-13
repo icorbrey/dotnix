@@ -20,6 +20,7 @@
     ./rust.nix
     ./starship.nix
     ./steam.nix
+    ./wayland.nix
     ./webdev-common.nix
     ./wsl-bridge.nix
     ./zellij.nix
