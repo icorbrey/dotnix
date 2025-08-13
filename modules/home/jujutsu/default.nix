@@ -91,6 +91,35 @@
                     format_short_cryptographic_signature(commit.signature())),
                 )
               '';
+              "prompt" = "
+                'at ' ++ concat(
+                  label(
+                    separate(' ',
+                      if(current_working_copy, 'working_copy'),
+                      if(immutable, 'immutable'),
+                      if(conflict, 'conflict'),
+                      if(divergent, 'divergent'),
+                      if(hidden, 'hidden'),
+                    ),
+                    if(divergent, '?? ', if(conflict, '× ', '')),
+                  ),
+                  change_id.shortest(8),
+                  ' ',
+                  if(empty,
+                    label('empty',
+                      concat(
+                        '(∅',
+                        if(!description, ',Đ'),
+                        ')',
+                      ),
+                    ),
+                  ),
+                  if(description,
+                    truncate_end(32, description.first_line(), '…'),
+                    label('description placeholder', if(!empty, '(Đ)')),
+                  ),
+                ) ++ ' '
+              ";
             };
 
             jjj.splash.skip = true;
