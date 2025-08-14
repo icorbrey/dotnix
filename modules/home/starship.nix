@@ -9,10 +9,13 @@
       programs.starship.settings = {
         cmd_duration.disabled = true;
         directory.style = "bold blue";
+        username.show_always = true;
 
         git_branch.disabled = true;
         git_commit.disabled = true;
         git_status.disabled = true;
+        package.disabled = true;
+        rust.disabled = true;
 
         custom.jj = {
           ignore_timeout = true;
@@ -21,8 +24,6 @@
           command = "jj log -r @ --no-graph --color always -T prompt --ignore-working-copy && jj op log -T 'id.short(8)' --limit 1 --no-graph --color always --ignore-working-copy";
           style = "none";
         };
-        
-        username.show_always = true;
       };
     };
 }
