@@ -7,6 +7,10 @@ _default:
 # Snapshot and install the current configuration.
 install hostname=shell('hostname'): _snapshot (_switch hostname)
 
+# Read the news.
+news hostname=shell('hostname'):
+    @home-manager news --flake .#{{hostname}}
+
 # Update the flake's input and install the current configuration.
 update hostname=shell('hostname'): _update _snapshot (_switch hostname)
 
