@@ -69,6 +69,7 @@
               "closest_pushable(to)" = "heads(::to & ~description(exact:'') & (~empty() | merges()))";
             };
 
+            aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
 
             templates.git_push_bookmark = "icorbrey/push-";
