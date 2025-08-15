@@ -36,6 +36,8 @@
             bufferline = "always";
             true-color = true;
 
+            jump-label-alphabet = "jkl;fdsauiohnmretcgwvpyqxbz";
+
             file-picker.hidden = false;
             smart-tab.enable = false;
           };
