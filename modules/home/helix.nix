@@ -119,18 +119,18 @@
           language = let
             def = name: obj: { inherit name; } // obj;
           in [
+            (def "git-commit" {
+              rulers = [73];
+            })
+            (def "jjdescription" {
+              rulers = [73];
+            })
             (def "markdown" {
               rulers = [81];
             })
             (def "sql" {
               indent.tab-width = 4;
               indent.unit = "    ";
-            })
-            (def "git-commit" {
-              rulers = [73];
-            })
-            (def "jjdescription" {
-              rulers = [73];
             })
           ];
         };
