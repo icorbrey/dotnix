@@ -22,6 +22,7 @@
     ./steam.nix
     ./wayland.nix
     ./webdev-common.nix
+    ./wezterm
     ./wsl-bridge.nix
     ./zellij.nix
   ];

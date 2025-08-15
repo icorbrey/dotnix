@@ -43,6 +43,7 @@
     fonts.enable = true;
     steam.enable = true;
 
+    wezterm.enable = true;
     # Language support
     webdev-common.enable = true;
     langs-common.enable = true;
