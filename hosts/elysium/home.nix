@@ -26,6 +26,7 @@
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
+    wezterm.enable = true;
     zellij.enable = true;
     helix.enable = true;
     fish.enable = true;
