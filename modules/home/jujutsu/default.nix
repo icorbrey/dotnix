@@ -72,7 +72,7 @@
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
 
-            templates.git_push_bookmark = "icorbrey/push-";
+            templates.git_push_bookmark = "'icorbrey/push-' ++ change_id.shortest(12)";
         
             template-aliases = {
               "format_short_signature(signature)" = "coalesce(signature.name(), coalesce(signature.email(), email_placeholder))";
