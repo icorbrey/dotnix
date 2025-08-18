@@ -123,6 +123,11 @@
             args = ["--stdio"];
           };
           
+          language-server.vscode-css-language-server = {
+            command = "vscode-css-language-server";
+            args = ["--stdio"];
+          };
+          
           language = let
             def = name: obj: { inherit name; } // obj;
           in [
@@ -131,6 +136,26 @@
             })
             (def "jjdescription" {
               rulers = [73];
+            })
+            (def "less" {
+              scope = "source.less";
+              file-types = ["less"];
+              language-id = "less";
+              grammar = "less";
+
+              comment-tokens = ["//"];
+              block-comment-tokens = [{
+                start = "/*";
+                end = "*/";
+              }];
+
+              indent.tab-width = 2;
+              indent.unit = "  ";
+
+              language-servers = [
+                "vscode-css-language-server"
+                "emmet-language-server"
+              ];
             })
             (def "html" {
               language-servers = [
@@ -158,6 +183,12 @@
               ];
             })
           ];
+
+          grammar = [{
+            name = "less";
+            source.git = "https://github.com/jimliang/tree-sitter-less";
+            source.rev = "945f52c94250309073a96bbfbc5bcd57ff2bde49";
+          }];
         };
       };
     };
