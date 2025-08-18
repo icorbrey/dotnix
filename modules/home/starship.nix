@@ -88,7 +88,7 @@
           ignore_timeout = true;
           description = "The current jj operation";
           when = "jj root --ignore-immutable";
-          command = "jj op log -T 'id.short(4)' --limit 1 --no-graph --color never --ignore-working-copy | head";
+          command = "jj op log -T 'id.short(4)' --limit 1 --no-graph --color never --ignore-working-copy";
           format = lib.strings.concatStrings [
             (transition icons.arrow.right "blue")
             (highlight " ${icons.operation} $output " "blue")
