@@ -36,7 +36,7 @@
             bufferline = "always";
             true-color = true;
 
-            jump-label-alphabet = "jkl;fdsauiohnmretcgwvpyqxbz";
+            jump-label-alphabet = "jklfdsauiohnmretcgwvpyqxbz";
 
             file-picker.hidden = false;
             smart-tab.enable = false;
