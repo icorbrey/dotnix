@@ -8,8 +8,8 @@
       {
         modules.home.wsl-bridge.map = {
           "~/.config/wezterm/wezterm.lua" = {
-            directory = { userHome, ... }: "${userHome}/.config/wezterm";
-            filename = "wezterm.lua";
+            directory = { userHome, ... }: userHome;
+            filename = ".wezterm.lua";
           };
         };
         
