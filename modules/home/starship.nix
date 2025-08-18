@@ -5,24 +5,106 @@
 
   config = let starship = config.modules.home.starship;
     in lib.mkIf starship.enable {
+      modules.home.wsl-bridge.map = {
+        "~/.config/starship.toml" = {
+          directory = { userHome, ... }: "${userHome}/.config";
+          filename = "starship.toml";
+        };
+      };
+      
       programs.starship.enable = true;
-      programs.starship.settings = {
-        cmd_duration.disabled = true;
-        directory.style = "bold blue";
+      programs.starship.settings = let
+        icons.arrow.right = builtins.fromJSON '' "\ue0b0" '';
+        icons.commit = builtins.fromJSON '' "\ueabc" '';
+        icons.operation = builtins.fromJSON '' "\uf013" '';
+        icons.round.left = builtins.fromJSON '' "\ue0b6" '';
+        icons.round.right = builtins.fromJSON '' "\ue0b4" '';
+
+        highlight = str: bg: "[${str}](fg:black bg:${bg})";
+        transition = char: bg: "[${char}](fg:prev_bg bg:${bg})";
+      in {
+        format = lib.strings.concatStrings [
+          "$os"
+          "$username"
+          "$directory"
+          "\${custom.jj_change}"
+          "\${custom.jj_op}"
+          "$character"
+        ];
+        palette = "clarity_noir";
+
+        os.disabled = false;
+        os.format = lib.strings.concatStrings [
+          "[${icons.round.left}](fg:red)"
+          (highlight "$symbol" "red")
+        ];
+        os.symbols = {
+          Windows = "";
+          Ubuntu = "󰕈";
+          SUSE = "";
+          Raspbian = "󰐿";
+          Mint = "󰣭";
+          Macos = "󰀵";
+          Manjaro = "";
+          Linux = "󰌽";
+          Gentoo = "󰣨";
+          Fedora = "󰣛";
+          Alpine = "";
+          Amazon = "";
+          Android = "";
+          Arch = "󰣇";
+          Artix = "󰣇";
+          CentOS = "";
+          Debian = "󰣚";
+          Redhat = "󱄛";
+          RedHatEnterprise = "󱄛";
+        };
+        
         username.show_always = true;
+        username.format = lib.strings.concatStrings [
+          (transition icons.round.right "orange")
+          (highlight " $user " "orange")
+        ];
+        
+        directory.format = lib.strings.concatStrings [
+          (transition icons.arrow.right "yellow")
+          (highlight " $path " "yellow")
+        ];
+        directory.truncation_symbol = "…/";
+        directory.truncation_length = 3;
 
-        git_branch.disabled = true;
-        git_commit.disabled = true;
-        git_status.disabled = true;
-        package.disabled = true;
-        rust.disabled = true;
-
-        custom.jj = {
+        custom.jj_change = {
           ignore_timeout = true;
-          description = "The current jj status";
-          when = true;
-          command = "jj log -r @ --no-graph --color always -T prompt --ignore-working-copy && jj op log -T 'id.short(8)' --limit 1 --no-graph --color always --ignore-working-copy";
-          style = "none";
+          description = "The current jj operation";
+          when = "jj root --ignore-immutable";
+          command = "jj log -r @ --no-graph --color never -T 'change_id.shortest(1)' --ignore-working-copy";
+          format = lib.strings.concatStrings [
+            (transition icons.arrow.right "purple")
+            (highlight " ${icons.commit} $output " "purple")
+          ];
+        };
+        
+        custom.jj_op = {
+          ignore_timeout = true;
+          description = "The current jj operation";
+          when = "jj root --ignore-immutable";
+          command = "jj op log -T 'id.short(4)' --limit 1 --no-graph --color never --ignore-working-copy | head";
+          format = lib.strings.concatStrings [
+            (transition icons.arrow.right "blue")
+            (highlight " ${icons.operation} $output " "blue")
+          ];
+        };
+
+        character.success_symbol = "[${icons.arrow.right}](fg:prev_bg bg:none)";
+        character.error_symbol = "[${icons.arrow.right}](fg:prev_bg bg:red)[${icons.arrow.right}](fg:red bg:none)";
+
+        palettes.clarity_noir = {
+          red = "#FF3B11";
+          orange = "#FF9502";
+          yellow = "#FFCC00";
+          purple = "#B051DE";
+          blue = "#027AFF";
+          black = "#1E1E1E";
         };
       };
     };
