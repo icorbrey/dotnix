@@ -73,6 +73,7 @@
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
             aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
+            aliases.stage = ["stack" "closest_merge(@)+:: ~ empty()"];
 
             templates.git_push_bookmark = "'icorbrey/push-' ++ change_id.shortest(12)";
         
