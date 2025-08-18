@@ -67,10 +67,12 @@
               "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine()) ~ bookmarks(glob:'review/*@origin')";
               "closest_bookmark(to)" = "heads(::to & bookmarks())";
               "closest_pushable(to)" = "heads(::to & ~description(exact:'') & (~empty() | merges()))";
+              "closest_merge(to)" = "heads(::to & merges())";
             };
 
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
+            aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
 
             templates.git_push_bookmark = "'icorbrey/push-' ++ change_id.shortest(12)";
         
