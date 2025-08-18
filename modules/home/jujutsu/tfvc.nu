@@ -154,9 +154,7 @@ export def "main shelveset push" [
       })
     }
 
-    let prefix = (jj config get git.push-bookmark-prefix)
-    let change_id = (jj log --no-graph --color never -r $change -T "change_id.shortest(12)")
-    let bookmark = $prefix + $change_id
+    let bookmark = (jj log --no-graph --color never -r $change -T tfvc_push_bookmark)
 
     jj bookmark set $bookmark -r $change
     git tfs shelve $bookmark $bookmark -f

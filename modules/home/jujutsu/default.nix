@@ -75,9 +75,11 @@
             aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
             aliases.stage = ["stack" "closest_merge(@)+:: ~ empty()"];
 
-            templates.git_push_bookmark = "'icorbrey/push-' ++ change_id.shortest(12)";
+            templates.git_push_bookmark = "git_push_bookmark";
         
             template-aliases = {
+              "git_push_bookmark" = "'icorbrey/push-' ++ change_id.shortest(12)";
+              "tfvc_push_bookmark" = "'push-' ++ change_id.shortest(12)";
               "format_short_signature(signature)" = "coalesce(signature.name(), coalesce(signature.email(), email_placeholder))";
               "format_timestamp(timestamp)" = "timestamp.ago()";
               "format_short_commit_header(commit)" = ''
