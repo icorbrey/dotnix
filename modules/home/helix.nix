@@ -118,6 +118,11 @@
         };
 
         languages = {
+          language-server.emmet-language-server = {
+            command = "emmet-language-server";
+            args = ["--stdio"];
+          };
+          
           language = let
             def = name: obj: { inherit name; } // obj;
           in [
@@ -127,12 +132,30 @@
             (def "jjdescription" {
               rulers = [73];
             })
+            (def "html" {
+              language-servers = [
+                "vscode-html-language-server"
+                "emmet-language-server"
+              ];
+            })
+            (def "jsx" {
+              language-servers = [
+                "typescript-language-server"
+                "emmet-language-server"
+              ];
+            })
             (def "markdown" {
               rulers = [81];
             })
             (def "sql" {
               indent.tab-width = 4;
               indent.unit = "    ";
+            })
+            (def "tsx" {
+              language-servers = [
+                "typescript-language-server"
+                "emmet-language-server"
+              ];
             })
           ];
         };
