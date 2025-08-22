@@ -4,6 +4,7 @@
 
     bat = utils.mkToggle "bat" true;
     eza = utils.mkToggle "eza" true;
+    htop = utils.mkToggle "htop" true;
     just = utils.mkToggle "just" true;
     atuin = utils.mkToggle "atuin" true;
     zoxide = utils.mkToggle "zoxide" true;
@@ -15,6 +16,7 @@
         bat.enable = cli-common.bat.enable;
         eza.enable = cli-common.eza.enable;
         atuin.enable = cli-common.atuin.enable;
+        htop.enable = cli-common.htop.enable;
         zoxide.enable = cli-common.zoxide.enable;
       };
 
