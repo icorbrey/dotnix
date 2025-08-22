@@ -12,8 +12,16 @@
     auto-cpufreq.enable = true;
 
     # Global configuration
+    global.terminal = "gnome-terminal";
     global.shell = "fish";
     global.editor = "hx";
+
+    # Desktop environment
+    wayland.enable = true;
+
+    niri.enable = true;
+    niri.enableGdmHelpers = true;
+    niri.renderDevice = "/dev/dri/renderD128";
 
     # CLI
     cli-common.enable = true;
@@ -39,11 +47,9 @@
     # GUI
     obsidian.enable = true;
     discord.enable = true;
-    wayland.enable = true;
     fonts.enable = true;
     steam.enable = true;
 
-    wezterm.enable = true;
     # Language support
     webdev-common.enable = true;
     langs-common.enable = true;

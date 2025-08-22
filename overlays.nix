@@ -1,4 +1,5 @@
 { inputs, ... }: [
+  inputs.niri.overlays.niri
   inputs.nur.overlays.default
 
   (final: prev: {

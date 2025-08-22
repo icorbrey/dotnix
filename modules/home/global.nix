@@ -9,6 +9,11 @@
       type = with lib.types; str;
       default = "bash";
     };
+
+    terminal = lib.mkOption {
+      type = with lib.types; str;
+      default = "xterm";
+    };
     
     shellAliases = lib.mkOption {
       type = with lib.types; attrsOf str;

@@ -8,6 +8,9 @@
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.niri.url = "github:sodiboo/niri-flake";
+  inputs.niri.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   inputs.nur.url = "github:nix-community/NUR";
@@ -31,6 +34,7 @@
 
     extraSpecialArgs = {
       inherit inputs utils;
+      inherit (inputs) niri;
     };
   
   in {
