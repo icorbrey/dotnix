@@ -5,6 +5,7 @@
     bat = utils.mkToggle "bat" true;
     eza = utils.mkToggle "eza" true;
     just = utils.mkToggle "just" true;
+    atuin = utils.mkToggle "atuin" true;
     zoxide = utils.mkToggle "zoxide" true;
   };
 
@@ -13,6 +14,7 @@
       programs = {
         bat.enable = cli-common.bat.enable;
         eza.enable = cli-common.eza.enable;
+        atuin.enable = cli-common.atuin.enable;
         zoxide.enable = cli-common.zoxide.enable;
       };
 
