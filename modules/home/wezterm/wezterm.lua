@@ -7,11 +7,16 @@ config.font_size = 10.0
 config.color_scheme = "JetBrains Darcula"
 
 config.adjust_window_size_when_changing_font_size = false
-config.pane_focus_follows_mouse = true
 config.window_decorations = "RESIZE"
 config.audible_bell = "Disabled"
 
 config.use_fancy_tab_bar = false
+
+config.pane_focus_follows_mouse = true
+config.inactive_pane_hsb = {
+  saturation = 1.0,
+  brightness = 0.8,
+}
 
 config.quick_select_alphabet = "jklfdsauiohnmretcgwvpyqxbz"
 
