@@ -7,6 +7,7 @@ config.font_size = 10.0
 config.color_scheme = "JetBrains Darcula"
 
 config.adjust_window_size_when_changing_font_size = false
+config.pane_focus_follows_mouse = true
 config.window_decorations = "RESIZE"
 config.audible_bell = "Disabled"
 
@@ -14,7 +15,44 @@ config.use_fancy_tab_bar = false
 
 config.quick_select_alphabet = "jklfdsauiohnmretcgwvpyqxbz"
 
+function NavigatePaneDirection(key, direction)
+  return {
+    action = wezterm.action { ActivatePaneDirection=direction },
+    mods = "ALT",
+    key = key,
+  }
+end
+
+function NavigateTabDirection(key, direction)
+  return {
+    action = wezterm.action { ActivateTabRelative=direction },
+    mods = "CTRL|ALT",
+    key = key,
+  }
+end
+
+function MoveTabDirection(key, direction)
+  return {
+    action = wezterm.action { MoveTabRelative=direction },
+    mods = "SHIFT|ALT",
+    key = key,
+  }
+end
+
 config.keys = {
+  NavigatePaneDirection("h", "Left"),
+  NavigatePaneDirection("j", "Down"),
+  NavigatePaneDirection("k", "Up"),
+  NavigatePaneDirection("l", "Right"),
+  NavigateTabDirection("h", -1),
+  NavigateTabDirection("l", 1),
+  MoveTabDirection("h", -1),
+  MoveTabDirection("l", 1),
+  {
+    action = wezterm.action.TogglePaneZoomState,
+    mods = "ALT",
+    key = "f",
+  },
   {
     mods = "CTRL|SHIFT",
     key = "n",
