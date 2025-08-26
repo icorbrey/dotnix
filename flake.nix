@@ -55,5 +55,11 @@
       modules = [./hosts/NB-99KZST3/home.nix];
       inherit extraSpecialArgs pkgs;
     };
+
+    # Achatz lab station
+    homeConfigurations.school = home-manager.lib.homeManagerConfiguration {
+      modules = [./hosts/school/home.nix];
+      inherit extraSpecialArgs pkgs;
+    };
   };
 }
