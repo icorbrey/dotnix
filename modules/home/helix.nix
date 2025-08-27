@@ -9,7 +9,7 @@
 
     theme = lib.mkOption {
       type = lib.types.str;
-      default = "darcula-solid";
+      default = "clarity-noir";
     };
   };
 
@@ -26,6 +26,10 @@
           directory = {appData, ...}: "${appData}/helix";
           filename = "config.toml";
         };
+        "~/.config/helix/themes/*" = {
+          directory = { appData, ... }: "${appData}/helix/themes";
+          filename = "";
+        };
       };
 
       home.packages = [
@@ -41,6 +45,7 @@
           editor = {
             line-number = "relative";
             bufferline = "always";
+            color-modes = true;
             true-color = true;
 
             jump-label-alphabet = "jklfdsauiohnmretcgwvpyqxbz";
@@ -76,6 +81,9 @@
 
             # Find word references
             F12 = "@miw*;<space>/<ret>";
+
+            space.t = ":tree-sitter-highlight-name";
+            space.T = ":tree-sitter-scopes";
           };
 
           keys.select = {
@@ -121,6 +129,11 @@
             # Find word references
             F12 = "@<esc>miw*;<space>/<ret>";
           };
+        };
+
+        themes = import ./themes {
+          inherit lib;
+          target = "helix";
         };
 
         languages = {
