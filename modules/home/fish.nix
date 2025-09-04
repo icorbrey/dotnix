@@ -11,6 +11,9 @@
           set fish_greeting
           set -gx EDITOR ${config.modules.home.global.editor}
         '';
+        programs.fish.functions.fish_user_key_bindings = ''
+          bind \co edit_command_buffer
+        '';
         programs.fish.shellAliases = lib.mkMerge [
           config.modules.home.global.shellAliases
           { clear = "clear -x"; } # Don't get rid of command outputs
