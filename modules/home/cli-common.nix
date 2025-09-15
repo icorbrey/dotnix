@@ -9,6 +9,7 @@
     moon = utils.mkToggle "moon" true;
     atuin = utils.mkToggle "atuin" true;
     zoxide = utils.mkToggle "zoxide" true;
+    asciinema = utils.mkToggle "asciinema" true;
   };
 
   config = let cli-common = config.modules.home.cli-common;
@@ -24,6 +25,10 @@
       home.packages = utils.mkIfOptions cli-common {
         just = pkgs.just;
         moon = pkgs.moon;
+        asciinema = [
+          pkgs.asciinema-agg
+          pkgs.asciinema
+        ];
       };
 
       modules.home.global.shellAliases = lib.mkMerge [
