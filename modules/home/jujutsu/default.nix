@@ -50,9 +50,10 @@
           };
         };
     
+        programs.mergiraf.enable = true;
+        programs.jujutsu.enable = true;
         programs.git.enable = true;
 
-        programs.jujutsu.enable = true;
         programs.jujutsu.settings = lib.mkMerge [
           {
             user.name = "Isaac Corbrey";
@@ -74,6 +75,7 @@
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
             aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
             aliases.stage = ["stack" "closest_merge(@)+:: ~ empty()"];
+            aliases.solve = ["resolve" "--tool" "mergiraf"];
 
             templates.git_push_bookmark = "git_push_bookmark";
         
