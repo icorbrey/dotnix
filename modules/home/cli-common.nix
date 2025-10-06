@@ -6,6 +6,7 @@
     eza = utils.mkToggle "eza" true;
     htop = utils.mkToggle "htop" true;
     just = utils.mkToggle "just" true;
+    moon = utils.mkToggle "moon" true;
     atuin = utils.mkToggle "atuin" true;
     zoxide = utils.mkToggle "zoxide" true;
   };
@@ -15,13 +16,14 @@
       programs = {
         bat.enable = cli-common.bat.enable;
         eza.enable = cli-common.eza.enable;
-        atuin.enable = cli-common.atuin.enable;
         htop.enable = cli-common.htop.enable;
+        atuin.enable = cli-common.atuin.enable;
         zoxide.enable = cli-common.zoxide.enable;
       };
 
       home.packages = utils.mkIfOptions cli-common {
         just = pkgs.just;
+        moon = pkgs.moon;
       };
 
       modules.home.global.shellAliases = lib.mkMerge [
