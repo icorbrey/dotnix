@@ -28,6 +28,7 @@
           "$username"
           "$directory"
           "\${custom.jj_change}"
+          "\${custom.jj_conflict}"
           "\${custom.jj_op}"
           "$character"
         ];
@@ -81,6 +82,16 @@
           format = lib.strings.concatStrings [
             (transition icons.arrow.right "purple")
             (highlight " ${icons.commit} $output " "purple")
+          ];
+        };
+
+        custom.jj_conflict = {
+          ignore_timeout = true;
+          description = "Whether the current jj worktree has conflicts";
+          when = "jj resolve -l --ignore-working-copy";
+          format = lib.strings.concatStrings [
+            (transition icons.arrow.right "red")
+            (highlight " ?? " "red")
           ];
         };
         
