@@ -76,7 +76,7 @@
         custom.jj_change = {
           ignore_timeout = true;
           description = "The current jj operation";
-          when = "jj root --ignore-immutable";
+          when = "jj root --ignore-working-copy";
           command = "jj log -r @ --no-graph --color never -T 'change_id.shortest(1)' --ignore-working-copy";
           format = lib.strings.concatStrings [
             (transition icons.arrow.right "purple")
@@ -87,7 +87,7 @@
         custom.jj_op = {
           ignore_timeout = true;
           description = "The current jj operation";
-          when = "jj root --ignore-immutable";
+          when = "jj root --ignore-working-copy";
           command = "jj op log -T 'id.short(4)' --limit 1 --no-graph --color never --ignore-working-copy";
           format = lib.strings.concatStrings [
             (transition icons.arrow.right "blue")
