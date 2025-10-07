@@ -45,6 +45,7 @@
     # Language support
     webdev-common.enable = true;
     langs-common.enable = true;
+    dotnet.enable = true;
     docker.enable = true;
     rust.enable = true;
   };
