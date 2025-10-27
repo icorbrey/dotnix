@@ -57,7 +57,7 @@
         programs.jujutsu.settings = lib.mkMerge [
           {
             user.name = "Isaac Corbrey";
-            user.email = "icorbrey@gmail.com";
+            user.email = "isaac@isaaccorbrey.com";
 
             ui.default-command = "log";
             ui.editor = "hx";
