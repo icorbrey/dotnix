@@ -130,15 +130,21 @@
               directory = { userHome, ... }: "${userHome}/.config/jj/scripts";
               filename = "review.nu";
             };
+            "~/.config/jj/scripts/topic.nu" = {
+              directory = { userHome, ... }: "${userHome}/.config/jj/scripts";
+              filename = "topic.nu";
+            };
           };
         
           programs.jujutsu.settings = {
             aliases.changelog = ["util" "exec" "nu" "~/.config/jj/scripts/changelog.nu"];
             aliases.review = ["util" "exec" "nu" "~/.config/jj/scripts/review.nu"];
+            aliases.topic = ["util" "exec" "nu" "~/.config/jj/scripts/topic.nu"];
           };
 
           home.file.".config/jj/scripts/changelog.nu".source = ./changelog.nu;
           home.file.".config/jj/scripts/review.nu".source = ./review.nu;
+          home.file.".config/jj/scripts/topic.nu".source = ./topic.nu;
         }
         (lib.mkIf jujutsu.settings.tfvc.enable {
           modules.home.wsl-bridge.map = {
