@@ -4,6 +4,7 @@
 
     bat = utils.mkToggle "bat" true;
     eza = utils.mkToggle "eza" true;
+    vhs = utils.mkToggle "vhs" true;
     htop = utils.mkToggle "htop" true;
     just = utils.mkToggle "just" true;
     moon = utils.mkToggle "moon" true;
@@ -27,6 +28,7 @@
         beads = pkgs.beads;
         just = pkgs.just;
         moon = pkgs.moon;
+        vhs = pkgs.vhs;
         asciinema = [
           pkgs.asciinema-agg
           pkgs.asciinema
