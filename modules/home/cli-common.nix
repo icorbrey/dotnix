@@ -10,6 +10,7 @@
     moon = utils.mkToggle "moon" true;
     atuin = utils.mkToggle "atuin" true;
     beads = utils.mkToggle "beads" true;
+    codex = utils.mkToggle "codex" true;
     zoxide = utils.mkToggle "zoxide" true;
     asciinema = utils.mkToggle "asciinema" true;
   };
@@ -21,6 +22,7 @@
         eza.enable = cli-common.eza.enable;
         htop.enable = cli-common.htop.enable;
         atuin.enable = cli-common.atuin.enable;
+        codex.enable = cli-common.codex.enable;
         zoxide.enable = cli-common.zoxide.enable;
       };
 
