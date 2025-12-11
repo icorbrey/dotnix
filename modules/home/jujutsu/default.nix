@@ -1,4 +1,4 @@
-{ config, lib, ... }: {
+{ config, lib, pkgs, ... }: {
   options.modules.home.jujutsu = {
     enable = lib.mkEnableOption "jujutsu";
 
@@ -54,11 +54,16 @@
         programs.jujutsu.enable = true;
         programs.git.enable = true;
 
+        home.packages = [
+          pkgs.difftastic
+        ];
+
         programs.jujutsu.settings = lib.mkMerge [
           {
             user.name = "Isaac Corbrey";
             user.email = "isaac@isaaccorbrey.com";
 
+            ui.diff-formatter = "difft";
             ui.default-command = "log";
             ui.editor = "hx";
 
@@ -106,6 +111,11 @@
 
             review.wip-prefix = "wip/";
             review.review-prefix = "review/";
+            merge-tools.difft = {
+              program = "difft";
+              diff-args = ["--color=always" "$left" "$right"];
+              diff-invocation-mode = "file-by-file";
+            };
           }
           (lib.mkIf jujutsu.settings.signing.enable {
             git.sign-on-push = true;
