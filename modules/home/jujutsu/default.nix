@@ -70,6 +70,28 @@
             git.write-change-id-header = true;
 
             revset-aliases = {
+              # Identity
+              "user(x)" = "author(x) | committer(x)";
+              "mine()" = let
+                aliases = [
+                  # Personal aliases
+                  "isaac@isaaccorbrey.com"
+                  "icorbrey@gmail.com"
+
+                  # Do it Best aliases
+                  "icorbrey@ntserv.doitbestcorp.com"
+                  "isaac.corbrey@doitbest.com"
+
+                  # University of Saint Francis aliases
+                  "icorbrey@sf.edu"
+
+                  # Historical aliases
+                  "ICCorbrey01@indianatech.edu"
+                  "isaac.corbrey@corebts.com"
+                  "icorbrey@apterainc.com"
+                ];
+              in builtins.concatStringsSep " | " (builtins.map (x: "user('${x})'") aliases);
+
               # Tug helpers
               "closest_bookmark(to)" = "heads(::to & bookmarks())";
               "closest_pushable(to)" = "heads(::to & ~description(exact:'') & (~empty() | merges()))";
