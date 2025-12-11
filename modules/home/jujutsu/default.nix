@@ -70,14 +70,18 @@
             git.write-change-id-header = true;
 
             revset-aliases = {
+              # Tug helpers
               "closest_bookmark(to)" = "heads(::to & bookmarks())";
               "closest_pushable(to)" = "heads(::to & ~description(exact:'') & (~empty() | merges()))";
+
+              # Megamerge helpers
+              "mutable_roots()" = "roots(trunk()..) & mutable()";
               "closest_merge(to)" = "heads(::to & merges())";
             };
 
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
-            aliases.restack = ["rebase" "-d" "trunk()" "-s" "roots(trunk()..) & mutable()"];
+            aliases.restack = ["rebase" "-d" "trunk()" "-s" "mutable_roots()"];
             aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
             aliases.stage = ["stack" "closest_merge(@)+:: ~ empty()"];
             aliases.solve = ["resolve" "--tool" "mergiraf"];
