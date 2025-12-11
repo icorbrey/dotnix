@@ -121,7 +121,7 @@
 
             merge-tools.difft = {
               program = "difft";
-              diff-args = ["--color=always" "$left" "$right"];
+              diff-args = ["--color=always" "--display=inline" "$left" "$right"];
               diff-invocation-mode = "file-by-file";
             };
           }
