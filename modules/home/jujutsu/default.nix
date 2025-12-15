@@ -90,7 +90,7 @@
                   "isaac.corbrey@corebts.com"
                   "icorbrey@apterainc.com"
                 ];
-              in builtins.concatStringsSep " | " (builtins.map (x: "user('${x}')") aliases);
+              in builtins.concatStringsSep " | " (builtins.map (x: "user(glob:'${x}')") aliases);
 
               "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
 
