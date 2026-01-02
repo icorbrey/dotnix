@@ -5,37 +5,30 @@ _default:
 # - Will fail if the hostname does not have a valid configuration.
 # 
 # Snapshot and install the current configuration.
-install hostname=shell('hostname'): _snapshot (_switch hostname)
+install user=shell('whoami') hostname=shell('hostname'): _snapshot (_switch user hostname)
 
 # Read the news.
-news hostname=shell('hostname'):
-    @home-manager news --flake .#{{hostname}}
+news user=shell('whoami') hostname=shell('hostname'):
+    @home-manager news --flake .#{{user}}@{{hostname}}
 
 # Update the flake's input and install the current configuration.
-update hostname=shell('hostname'): _update _snapshot (_switch hostname)
+update user=shell('whoami') hostname=shell('hostname'): _update _snapshot (_switch user hostname)
 
 # Abandon current changes and install the previous configuration.
-revert hostname=shell('hostname'): _abandon (_switch hostname)
+revert user=shell('whoami') hostname=shell('hostname'): _abandon (_switch user hostname)
 
-# # Initialize configuration for the given host.
-# init hostname=shell('hostname') force="false": (_check-init hostname force) _snapshot (_init-host hostname) _snapshot
+_switch user hostname: (_switch-nixos hostname) (_switch-home user hostname)
 
-# _check-init hostname force:
-#     #!/bin/bash
-#     if [ -d "hosts/{{hostname}}" ] && [ "{{force}}" != "true" ]; then
-#         echo "Error: Host \`{{hostname}}\` already exists. Use \`just init --force=true\` to override." >&2
-#         exit 1
-#     fi
+_switch-nixos hostname:
+    @if nix eval .#nixosConfigurations.{{hostname}} --quiet > /dev/null 2>&1; then \
+        echo "Applying NixOS config for {{hostname}}"; \
+        sudo nixos-rebuild switch --flake .#{{hostname}}; \
+    fi
 
-# _init-host hostname:
-#     #!/bin/bash
-#     mkdir -p hosts/{{hostname}}
-#     cp templates/hosts/home.nix hosts/{{hostname}}/home.nix
-#     echo "Host \`{{hostname}}\` initialized. Be sure to update \`./flake.nix\`."
-
-# Switch to the Home Manager flake for the given hostname.
-_switch hostname:
-    @home-manager switch --flake .#{{hostname}} -b backup
+# Switch to the Home Manager flake for the given user and hostname.
+_switch-home user hostname:
+    @echo "Applying Home Manager config for {{user}}@{{hostname}}"
+    @home-manager switch --flake .#{{user}}@{{hostname}} -b backup
 
 _update:
     @nix flake update
