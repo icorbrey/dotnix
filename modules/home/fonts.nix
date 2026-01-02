@@ -12,7 +12,10 @@
       
       home.packages = utils.mkIfOptions fonts {
         fira-code = pkgs.fira-code;
-        recursive = pkgs.nerd-fonts.recursive-mono;
+        recursive = [
+          pkgs.recursive
+          pkgs.nerd-fonts.recursive-mono
+        ];
       };
     };
 }

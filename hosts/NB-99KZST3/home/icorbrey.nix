@@ -1,6 +1,6 @@
 { ... }: {
   imports = [
-    ../../modules/home
+    ../../../modules/home
   ];
 
   home.homeDirectory = "/home/icorbrey";

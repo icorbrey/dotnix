@@ -5,5 +5,6 @@
     auto-cpufreq = inputs.auto-cpufreq.packages.${prev.system}.default;
     beads = inputs.beads.packages.${prev.system}.default;
     helix = inputs.helix.packages.${prev.system}.default;
+    noctalia-shell = inputs.noctalia.packages.${prev.system}.default;
   })
 ]

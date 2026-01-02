@@ -13,6 +13,9 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+  inputs.noctalia.url = "github:noctalia-dev/noctalia-shell";
+  inputs.noctalia.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.nur.url = "github:nix-community/NUR";
 
   outputs = { home-manager, nixpkgs, ... } @ inputs: let
@@ -20,6 +23,10 @@
 
     overlays = import ./overlays.nix {
       inherit inputs;
+    };
+
+    overlayModule.nixpkgs = {
+      inherit overlays;
     };
 
     pkgs = import nixpkgs {
@@ -32,6 +39,10 @@
       inherit (nixpkgs) lib;
     };
 
+    specialArgs = {
+      inherit inputs;
+    };
+
     extraSpecialArgs = {
       inherit inputs utils;
     };
@@ -42,20 +53,28 @@
     };
 
     # Desktop
-    homeConfigurations.elysium = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/elysium/home.nix];
+    homeConfigurations."icorbrey@elysium" = home-manager.lib.homeManagerConfiguration {
+      modules = [./hosts/elysium/home/icorbrey.nix];
       inherit extraSpecialArgs pkgs;
     };
 
     # Personal laptop
-    homeConfigurations.zephyr = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/zephyr/home.nix];
+    nixosConfigurations."zephyr" = nixpkgs.lib.nixosSystem {
+      modules = [
+        inputs.noctalia.nixosModules.default
+        ./hosts/zephyr/configuration.nix
+        overlayModule
+      ];
+      inherit system specialArgs;
+    };
+    homeConfigurations."icorbrey@zephyr" = home-manager.lib.homeManagerConfiguration {
+      modules = [./hosts/zephyr/home/icorbrey.nix];
       inherit extraSpecialArgs pkgs;
     };
 
     # Work laptop
-    homeConfigurations.NB-99KZST3 = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/NB-99KZST3/home.nix];
+    homeConfigurations."icorbrey@NB-99KZST3" = home-manager.lib.homeManagerConfiguration {
+      modules = [./hosts/NB-99KZST3/home/icorbrey.nix];
       inherit extraSpecialArgs pkgs;
     };
   };

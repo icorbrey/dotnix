@@ -1,6 +1,6 @@
 { ... }: {
   imports = [
-    ../../modules/home
+    ../../../modules/home
   ];
 
   home.homeDirectory = "/home/icorbrey";
@@ -9,18 +9,24 @@
 
   modules.home = {
     home-manager.enable = true;
-    auto-cpufreq.enable = true;
+    wsl-bridge.enable = true;
+
+    wsl-bridge.paths = {
+      appData = "/mnt/c/Users/icorbrey/AppData/Roaming";
+      userHome = "/mnt/c/Users/icorbrey";
+    };
 
     # Global configuration
     global.shell = "fish";
     global.editor = "hx";
-
+    
     # CLI
     cli-common.enable = true;
     carapace.enable = true;
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
+    wezterm.enable = true;
     zellij.enable = true;
     helix.enable = true;
     fish.enable = true;
@@ -36,17 +42,10 @@
       signing.enable = true;
     };
 
-    # GUI
-    obsidian.enable = true;
-    discord.enable = true;
-    wayland.enable = true;
-    fonts.enable = true;
-    steam.enable = true;
-
-    wezterm.enable = true;
     # Language support
     webdev-common.enable = true;
     langs-common.enable = true;
+    dotnet.enable = true;
     docker.enable = true;
     rust.enable = true;
   };
