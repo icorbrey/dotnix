@@ -38,13 +38,13 @@
     };
 
     # GUI
+    noctalia.enable = true;
     obsidian.enable = true;
     discord.enable = true;
     wayland.enable = true;
     wezterm.enable = true;
     fonts.enable = true;
     steam.enable = true;
-    noctalia.enable = true;
     niri.enable = true;
 
     # Language support

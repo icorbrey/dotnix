@@ -1,9 +1,11 @@
-{ config, lib, ... }: {
+{ config, lib, pkgs, ... }: {
   options.modules.home.steam = {
     enable = lib.mkEnableOption "steam";
   };
 
-  config.modules.home.flatpak.apps = {
-    "com.valvesoftware.Steam".enable = config.modules.home.steam.enable;
+  config = lib.mkIf config.modules.home.steam.enable {
+    home.packages = [
+      pkgs.steam
+    ];
   };
 }
