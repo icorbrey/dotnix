@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.modules.home.jujutsu = {
     enable = lib.mkEnableOption "jujutsu";
 
@@ -31,7 +36,7 @@
         type = with lib.types; str;
       };
     };
-    
+
     settings.tfvc = {
       enable = lib.mkEnableOption "tfvc support";
       url = lib.mkOption {
@@ -40,22 +45,25 @@
     };
   };
 
-  config = let jujutsu = config.modules.home.jujutsu;
-    in lib.mkIf jujutsu.enable (lib.mkMerge [
+  config = let
+    jujutsu = config.modules.home.jujutsu;
+  in
+    lib.mkIf jujutsu.enable (lib.mkMerge [
       {
         modules.home.wsl-bridge.map = {
           "~/.config/jj/config.toml" = {
-            directory = { appData, ... }: "${appData}/jj";
+            directory = {appData, ...}: "${appData}/jj";
             filename = "config.toml";
           };
         };
-    
+
         programs.mergiraf.enable = true;
         programs.jujutsu.enable = true;
         programs.git.enable = true;
 
         home.packages = [
           pkgs.difftastic
+          pkgs.alejandra
         ];
 
         programs.jujutsu.settings = lib.mkMerge [
@@ -90,7 +98,8 @@
                   "isaac.corbrey@corebts.com"
                   "icorbrey@apterainc.com"
                 ];
-              in builtins.concatStringsSep " | " (builtins.map (x: "user(glob:'${x}')") aliases);
+              in
+                builtins.concatStringsSep " | " (builtins.map (x: "user(glob:'${x}')") aliases);
 
               "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
 
@@ -111,12 +120,17 @@
             aliases.solve = ["resolve" "--tool" "mergiraf"];
 
             templates.git_push_bookmark = "git_push_bookmark";
-        
+
             template-aliases = {
               "git_push_bookmark" = "'icorbrey/push-' ++ change_id.shortest(12)";
               "tfvc_push_bookmark" = "'push-' ++ change_id.shortest(12)";
               "format_short_signature(signature)" = "coalesce(signature.name(), coalesce(signature.email(), email_placeholder))";
               "format_timestamp(timestamp)" = "timestamp.ago()";
+            };
+
+            fix.tools.alejandra = {
+              command = ["alejandra" "--quiet"];
+              patterns = ["glob:'**/*.nix'"];
             };
 
             jjj.splash.skip = true;
@@ -142,7 +156,7 @@
       (lib.mkIf (config.modules.home.nushell.enable && jujutsu.settings.tfvc.enable) {
         modules.home.wsl-bridge.map = {
           "~/.config/jj/scripts/tfvc.nu" = {
-            directory = { userHome, ... }: "${userHome}/.config/jj/scripts";
+            directory = {userHome, ...}: "${userHome}/.config/jj/scripts";
             filename = "tfvc.nu";
           };
         };
