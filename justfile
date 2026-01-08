@@ -7,6 +7,9 @@ _default:
 # Snapshot and install the current configuration.
 install user=shell('whoami') hostname=shell('hostname'): _snapshot (_switch user hostname)
 
+# Install only the Home Manager configuration.
+install-home user=shell('whoami') hostname=shell('hostname'): _snapshot (_switch-home user hostname)
+
 # Read the news.
 news user=shell('whoami') hostname=shell('hostname'):
     @home-manager news --flake .#{{user}}@{{hostname}}
