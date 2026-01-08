@@ -230,6 +230,7 @@ focus-ring {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 spawn-sh-at-startup "swayidle -w timeout 300 'noctalia-shell ipc call lockScreen lock' timeout 600 'niri msg action power-off-monitors' timeout 600 'if [ \"$(cat /sys/class/power_supply/AC/online 2>/dev/null)\" = \"0\" ]; then systemctl suspend; fi' resume 'niri msg action power-on-monitors' before-sleep 'noctalia-shell ipc call lockScreen lock'"
+spawn-sh-at-startup "1password"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
