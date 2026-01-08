@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.modules.home.steam = {
     enable = lib.mkEnableOption "steam";
   };

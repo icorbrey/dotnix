@@ -1,24 +1,30 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.home.starship = {
     enable = lib.mkEnableOption "starship";
   };
 
-  config = let starship = config.modules.home.starship;
-    in lib.mkIf starship.enable {
+  config = let
+    starship = config.modules.home.starship;
+  in
+    lib.mkIf starship.enable {
       modules.home.wsl-bridge.map = {
         "~/.config/starship.toml" = {
-          directory = { userHome, ... }: "${userHome}/.config";
+          directory = {userHome, ...}: "${userHome}/.config";
           filename = "starship.toml";
         };
       };
-      
+
       programs.starship.enable = true;
       programs.starship.settings = let
-        icons.arrow.right = builtins.fromJSON '' "\ue0b0" '';
-        icons.commit = builtins.fromJSON '' "\ueabc" '';
-        icons.operation = builtins.fromJSON '' "\uf013" '';
-        icons.round.left = builtins.fromJSON '' "\ue0b6" '';
-        icons.round.right = builtins.fromJSON '' "\ue0b4" '';
+        icons.arrow.right = builtins.fromJSON ''"\ue0b0" '';
+        icons.commit = builtins.fromJSON ''"\ueabc" '';
+        icons.operation = builtins.fromJSON ''"\uf013" '';
+        icons.round.left = builtins.fromJSON ''"\ue0b6" '';
+        icons.round.right = builtins.fromJSON ''"\ue0b4" '';
 
         highlight = str: bg: "[${str}](fg:black bg:${bg})";
         transition = char: bg: "[${char}](fg:prev_bg bg:${bg})";
@@ -60,13 +66,13 @@
           Redhat = "󱄛";
           RedHatEnterprise = "󱄛";
         };
-        
+
         username.show_always = true;
         username.format = lib.strings.concatStrings [
           (transition icons.round.right "orange")
           (highlight " $user " "orange")
         ];
-        
+
         directory.format = lib.strings.concatStrings [
           (transition icons.arrow.right "yellow")
           (highlight " $path " "yellow")
@@ -94,7 +100,7 @@
             (highlight " ?? " "red")
           ];
         };
-        
+
         custom.jj_op = {
           ignore_timeout = true;
           description = "The current jj operation";

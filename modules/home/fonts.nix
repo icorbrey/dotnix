@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}: {
   options.modules.home.fonts = {
     enable = lib.mkEnableOption "fonts";
 
@@ -6,10 +12,12 @@
     recursive = utils.mkToggle "Recursive" true;
   };
 
-  config = let fonts = config.modules.home.fonts;
-    in lib.mkIf fonts.enable {
+  config = let
+    fonts = config.modules.home.fonts;
+  in
+    lib.mkIf fonts.enable {
       fonts.fontconfig.enable = true;
-      
+
       home.packages = utils.mkIfOptions fonts {
         fira-code = pkgs.fira-code;
         recursive = [

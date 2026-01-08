@@ -1,4 +1,4 @@
-{ pkgs }: {
+{pkgs}: {
   default = pkgs.mkShell {
     nativeBuildInputs = with pkgs; [
       git

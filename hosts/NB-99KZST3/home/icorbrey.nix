@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   imports = [
     ../../../modules/home
   ];
@@ -6,7 +6,7 @@
   home.homeDirectory = "/home/icorbrey";
   home.username = "icorbrey";
   home.stateVersion = "25.05";
-  
+
   modules.home = {
     home-manager.enable = true;
     wsl-bridge.enable = true;

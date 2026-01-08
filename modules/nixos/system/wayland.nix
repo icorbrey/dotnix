@@ -1,10 +1,17 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.modules.nixos.system.wayland = {
     enable = lib.mkEnableOption "wayland";
   };
 
-  config = let wayland = config.modules.nixos.system.wayland;
-    in lib.mkIf wayland.enable {
+  config = let
+    wayland = config.modules.nixos.system.wayland;
+  in
+    lib.mkIf wayland.enable {
       programs.xwayland.enable = true;
 
       xdg.portal.enable = true;

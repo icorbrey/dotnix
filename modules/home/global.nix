@@ -1,4 +1,4 @@
-{ lib, ... }: {
+{lib, ...}: {
   options.modules.home.global = {
     editor = lib.mkOption {
       type = with lib.types; str;
@@ -9,7 +9,7 @@
       type = with lib.types; str;
       default = "bash";
     };
-    
+
     shellAliases = lib.mkOption {
       type = with lib.types; attrsOf str;
       default = {};

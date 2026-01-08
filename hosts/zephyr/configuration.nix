@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos
@@ -19,7 +19,7 @@
     system.printing.enable = true;
     system.flatpak.enable = true;
     system.wayland.enable = true;
-    
+
     sessions.plasma.enable = true;
     sessions.niri.enable = true;
 

@@ -1,10 +1,17 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.modules.home.zellij = {
     enable = lib.mkEnableOption "zellij";
   };
 
-  config = let zellij = config.modules.home.zellij;
-    in lib.mkIf zellij.enable {
+  config = let
+    zellij = config.modules.home.zellij;
+  in
+    lib.mkIf zellij.enable {
       home.packages = [
         pkgs.zellij
       ];

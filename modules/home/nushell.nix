@@ -1,10 +1,16 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.home.nushell = {
     enable = lib.mkEnableOption "nushell";
   };
 
-  config = let nushell = config.modules.home.nushell;
-    in lib.mkIf nushell.enable (lib.mkMerge [
+  config = let
+    nushell = config.modules.home.nushell;
+  in
+    lib.mkIf nushell.enable (lib.mkMerge [
       {
         programs.nushell.enable = true;
         programs.nushell.extraConfig = ''

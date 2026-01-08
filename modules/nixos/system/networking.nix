@@ -1,4 +1,8 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.nixos.system.networking = {
     enable = lib.mkOption {
       default = true;
@@ -6,8 +10,10 @@
     };
   };
 
-  config = let inherit (config.modules.nixos.system) networking;
-    in lib.mkIf networking.enable {
+  config = let
+    inherit (config.modules.nixos.system) networking;
+  in
+    lib.mkIf networking.enable {
       networking.networkmanager.enable = true;
     };
 }

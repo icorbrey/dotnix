@@ -1,4 +1,4 @@
-{ lib, ... }: {
+{lib, ...}: {
   mkToggle = description: default: {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -7,11 +7,16 @@
   };
 
   mkIfOptions = options: inputs:
-    lib.flatten (lib.mapAttrsToList (name: value:
-      if (lib.attrByPath (lib.splitString "." name) {} options).enable
-        then (if builtins.isList value
-          then value
-          else [value])
-        else []
-      ) inputs);
+    lib.flatten (lib.mapAttrsToList (
+        name: value:
+          if (lib.attrByPath (lib.splitString "." name) {} options).enable
+          then
+            (
+              if builtins.isList value
+              then value
+              else [value]
+            )
+          else []
+      )
+      inputs);
 }

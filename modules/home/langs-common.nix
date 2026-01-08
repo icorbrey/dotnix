@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}: {
   options.modules.home.langs-common = {
     enable = lib.mkEnableOption "langs-common";
 
@@ -8,8 +14,10 @@
     yaml = utils.mkToggle "yaml" true;
   };
 
-  config = let langs-common = config.modules.home.langs-common;
-    in lib.mkIf langs-common.enable {
+  config = let
+    langs-common = config.modules.home.langs-common;
+  in
+    lib.mkIf langs-common.enable {
       home.packages = utils.mkIfOptions langs-common {
         markdown = [
           pkgs.markdown-oxide

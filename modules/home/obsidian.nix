@@ -1,4 +1,8 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.home.obsidian = {
     enable = lib.mkEnableOption "obsidian";
   };

@@ -1,10 +1,16 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.home.carapace = {
     enable = lib.mkEnableOption "carapace";
   };
 
-  config = let carapace = config.modules.home.carapace;
-    in lib.mkIf carapace.enable (lib.mkMerge [
+  config = let
+    carapace = config.modules.home.carapace;
+  in
+    lib.mkIf carapace.enable (lib.mkMerge [
       {
         programs.carapace.enable = true;
       }

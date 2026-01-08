@@ -7,7 +7,7 @@
 
   inputs.helix.url = "github:icorbrey/helix/custom";
   inputs.helix.inputs.nixpkgs.follows = "nixpkgs";
-  
+
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -18,7 +18,11 @@
 
   inputs.nur.url = "github:nix-community/NUR";
 
-  outputs = { home-manager, nixpkgs, ... } @ inputs: let
+  outputs = {
+    home-manager,
+    nixpkgs,
+    ...
+  } @ inputs: let
     system = "x86_64-linux";
 
     overlays = import ./overlays.nix {
@@ -46,7 +50,6 @@
     extraSpecialArgs = {
       inherit inputs utils;
     };
-  
   in {
     devShells.${system} = import ./shell.nix {
       inherit pkgs;

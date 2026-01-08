@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   imports = [
     ../../../modules/home
   ];
@@ -27,11 +27,13 @@
     fish.enable = true;
 
     jujutsu.settings = {
-      scopes = [{
-        "--when".repositories = ["~/dev/forks"];
-        git.fetch = ["origin" "upstream"];
-        git.push = "origin";
-      }];
+      scopes = [
+        {
+          "--when".repositories = ["~/dev/forks"];
+          git.fetch = ["origin" "upstream"];
+          git.push = "origin";
+        }
+      ];
 
       signing.key = "~/.ssh/id_ed25519.pub";
       signing.enable = true;

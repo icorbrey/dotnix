@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.modules.home.helix = {
     enable = lib.mkEnableOption "helix";
 
@@ -8,15 +13,17 @@
     };
   };
 
-  config = let helix = config.modules.home.helix;
-    in lib.mkIf helix.enable {
+  config = let
+    helix = config.modules.home.helix;
+  in
+    lib.mkIf helix.enable {
       modules.home.wsl-bridge.map = {
         "~/.config/helix/languages.toml" = {
-          directory = { appData, ... }: "${appData}/helix";
+          directory = {appData, ...}: "${appData}/helix";
           filename = "languages.toml";
         };
         "~/.config/helix/config.toml" = {
-          directory = { appData, ... }: "${appData}/helix";
+          directory = {appData, ...}: "${appData}/helix";
           filename = "config.toml";
         };
       };
@@ -24,7 +31,7 @@
       home.packages = [
         pkgs.steel
       ];
-      
+
       programs.helix = {
         enable = true;
 
@@ -121,14 +128,14 @@
             command = "emmet-language-server";
             args = ["--stdio"];
           };
-          
+
           language-server.vscode-css-language-server = {
             command = "vscode-css-language-server";
             args = ["--stdio"];
           };
-          
+
           language = let
-            def = name: obj: { inherit name; } // obj;
+            def = name: obj: {inherit name;} // obj;
           in [
             (def "git-commit" {
               rulers = [73];
@@ -143,10 +150,12 @@
               grammar = "less";
 
               comment-tokens = ["//"];
-              block-comment-tokens = [{
-                start = "/*";
-                end = "*/";
-              }];
+              block-comment-tokens = [
+                {
+                  start = "/*";
+                  end = "*/";
+                }
+              ];
 
               indent.tab-width = 2;
               indent.unit = "  ";
@@ -183,11 +192,13 @@
             })
           ];
 
-          grammar = [{
-            name = "less";
-            source.git = "https://github.com/jimliang/tree-sitter-less";
-            source.rev = "945f52c94250309073a96bbfbc5bcd57ff2bde49";
-          }];
+          grammar = [
+            {
+              name = "less";
+              source.git = "https://github.com/jimliang/tree-sitter-less";
+              source.rev = "945f52c94250309073a96bbfbc5bcd57ff2bde49";
+            }
+          ];
         };
       };
     };

@@ -1,10 +1,17 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   options.modules.home.fish = {
     enable = lib.mkEnableOption "fish";
   };
 
-  config = let fish = config.modules.home.fish;
-    in lib.mkIf fish.enable (lib.mkMerge [
+  config = let
+    fish = config.modules.home.fish;
+  in
+    lib.mkIf fish.enable (lib.mkMerge [
       {
         programs.fish.enable = true;
         programs.fish.interactiveShellInit = ''
@@ -16,7 +23,7 @@
         '';
         programs.fish.shellAliases = lib.mkMerge [
           config.modules.home.global.shellAliases
-          { clear = "clear -x"; } # Don't get rid of command outputs
+          {clear = "clear -x";} # Don't get rid of command outputs
         ];
       }
       (lib.mkIf (config.modules.home.global.shell == "fish") {

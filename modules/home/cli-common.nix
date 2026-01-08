@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}: {
   options.modules.home.cli-common = {
     enable = lib.mkEnableOption "cli-common";
 
@@ -15,8 +21,10 @@
     asciinema = utils.mkToggle "asciinema" true;
   };
 
-  config = let cli-common = config.modules.home.cli-common;
-    in lib.mkIf cli-common.enable {
+  config = let
+    cli-common = config.modules.home.cli-common;
+  in
+    lib.mkIf cli-common.enable {
       programs = {
         bat.enable = cli-common.bat.enable;
         eza.enable = cli-common.eza.enable;

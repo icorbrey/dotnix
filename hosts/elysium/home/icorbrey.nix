@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   imports = [
     ../../../modules/home
   ];
@@ -19,7 +19,7 @@
     # Global configuration
     global.shell = "fish";
     global.editor = "hx";
-    
+
     # CLI
     cli-common.enable = true;
     carapace.enable = true;
@@ -32,11 +32,13 @@
     fish.enable = true;
 
     jujutsu.settings = {
-      scopes = [{
-        "--when".repositories = ["~/dev/forks"];
-        git.fetch = ["origin" "upstream"];
-        git.push = "origin";
-      }];
+      scopes = [
+        {
+          "--when".repositories = ["~/dev/forks"];
+          git.fetch = ["origin" "upstream"];
+          git.push = "origin";
+        }
+      ];
 
       signing.key = "~/.ssh/id_ed25519.pub";
       signing.enable = true;

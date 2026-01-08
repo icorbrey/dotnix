@@ -1,4 +1,8 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.nixos.sddm = {
     enable = lib.mkEnableOption "sddm";
 
@@ -9,8 +13,10 @@
     };
   };
 
-  config = let sddm = config.modules.nixos.sddm;
-    in lib.mkIf sddm.enable (lib.mkMerge [
+  config = let
+    sddm = config.modules.nixos.sddm;
+  in
+    lib.mkIf sddm.enable (lib.mkMerge [
       {
         services.displayManager.sddm.enable = true;
       }

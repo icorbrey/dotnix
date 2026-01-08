@@ -1,4 +1,8 @@
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   options.modules.nixos.system.time = {
     timeZone = lib.mkOption {
       default = "America/Indiana/Indianapolis";
@@ -6,8 +10,9 @@
     };
   };
 
-  config = let time = config.modules.nixos.system.time;
-    in {
-      time.timeZone = time.timeZone;
-    };
+  config = let
+    time = config.modules.nixos.system.time;
+  in {
+    time.timeZone = time.timeZone;
+  };
 }
