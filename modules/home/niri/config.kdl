@@ -229,7 +229,7 @@ focus-ring {
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
-spawn-sh-at-startup "swayidle -w timeout 300 'noctalia-shell ipc call lockScreen lock' timeout 600 'niri msg action power-off-monitors' timeout 600 'if [ \"$(cat /sys/class/power_supply/AC/online 2>/dev/null)\" = \"0\" ]; then systemctl suspend; fi' resume 'niri msg action power-on-monitors' before-sleep 'noctalia-shell ipc call lockScreen lock'"
+spawn-sh-at-startup "swayidle -w timeout 300 'loginctl lock-session; noctalia-shell ipc call lockScreen lock' timeout 600 'niri msg action power-off-monitors' timeout 600 'if [ \"$(cat /sys/class/power_supply/AC/online 2>/dev/null)\" = \"0\" ]; then systemctl suspend; fi' resume 'niri msg action power-on-monitors' before-sleep 'loginctl lock-session; noctalia-shell ipc call lockScreen lock'"
 spawn-sh-at-startup "1password"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
@@ -325,12 +325,12 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: wezterm" { spawn "wezterm"; }
     Mod+D hotkey-overlay-title="Run an Application: Noctalia Launcher" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+    Super+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn-sh "loginctl lock-session; noctalia-shell ipc call lockScreen lock"; }
     Mod+I hotkey-overlay-title="Open Settings: Noctalia" { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
     Mod+X hotkey-overlay-title="Open Session Menu: Noctalia" { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     Alt+Space hotkey-overlay-title="Open Launcher: Noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Semicolon hotkey-overlay-title="Open Emoji Picker: Noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
-    Ctrl+Shift+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+    Ctrl+Shift+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn-sh "loginctl lock-session; noctalia-shell ipc call lockScreen lock"; }
     Mod+Shift+S hotkey-overlay-title="Screenshot: Niri" { screenshot; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
