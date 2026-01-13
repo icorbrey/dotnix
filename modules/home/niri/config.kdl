@@ -327,6 +327,7 @@ binds {
     Mod+D hotkey-overlay-title="Run an Application: Noctalia Launcher" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
     Mod+I hotkey-overlay-title="Open Settings: Noctalia" { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+    Mod+X hotkey-overlay-title="Open Session Menu: Noctalia" { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     Alt+Space hotkey-overlay-title="Open Launcher: Noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Semicolon hotkey-overlay-title="Open Emoji Picker: Noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
     Ctrl+Shift+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
