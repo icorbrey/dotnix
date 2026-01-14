@@ -19,6 +19,7 @@
     codex = utils.mkToggle "codex" true;
     zoxide = utils.mkToggle "zoxide" true;
     asciinema = utils.mkToggle "asciinema" true;
+    ripgrep = utils.mkToggle "ripgrep" true;
   };
 
   config = let
@@ -39,6 +40,7 @@
         just = pkgs.just;
         moon = pkgs.moon;
         vhs = pkgs.vhs;
+        ripgrep = pkgs.ripgrep;
         asciinema = [
           pkgs.asciinema-agg
           pkgs.asciinema
