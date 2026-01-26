@@ -16,6 +16,7 @@
   modules.nixos = {
     system.power-management.enable = true;
     system.bluetooth.enable = true;
+    system.intel-graphics.enable = true;
     system.printing.enable = true;
     system.flatpak.enable = true;
     system.wayland.enable = true;
