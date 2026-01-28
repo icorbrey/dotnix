@@ -331,6 +331,7 @@ binds {
     Alt+Space hotkey-overlay-title="Open Launcher: Noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Semicolon hotkey-overlay-title="Open Emoji Picker: Noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
     Ctrl+Shift+Alt+L hotkey-overlay-title="Lock the Screen: Noctalia" { spawn-sh "loginctl lock-session; noctalia-shell ipc call lockScreen lock"; }
+    Mod+Shift+R hotkey-overlay-title="Screen Recording: Noctalia" { spawn "noctalia-shell" "ipc" "call" "screenRecorder" "toggle"; }
     Mod+Shift+S hotkey-overlay-title="Screenshot: Niri" { screenshot; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -519,7 +520,7 @@ binds {
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
     // Mod+R { switch-preset-column-width-back; }
-    Mod+Shift+R { switch-preset-window-height; }
+    // Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
