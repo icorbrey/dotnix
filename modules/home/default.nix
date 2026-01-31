@@ -22,6 +22,7 @@
     ./rust.nix
     ./starship.nix
     ./steam.nix
+    ./tailscale.nix
     ./wayland.nix
     ./webdev-common.nix
     ./wezterm

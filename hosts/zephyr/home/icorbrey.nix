@@ -48,6 +48,7 @@
     fonts.enable = true;
     steam.enable = true;
     niri.enable = true;
+    tailscale.enable = true;
 
     # Language support
     webdev-common.enable = true;

@@ -9,6 +9,7 @@
     ./networking.nix
     ./power-management.nix
     ./printing.nix
+    ./tailscale.nix
     ./time.nix
     ./wayland.nix
   ];
