@@ -15,7 +15,7 @@
     ./java.nix
     ./jujutsu
     ./langs-common.nix
-    ./noctalia
+    ./dank-material-shell.nix
     ./niri
     ./nushell.nix
     ./obsidian.nix

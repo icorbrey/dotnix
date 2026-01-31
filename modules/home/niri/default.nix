@@ -44,5 +44,9 @@
       ];
 
       xdg.configFile."niri/config.kdl".text = combinedConfig;
+      xdg.configFile."niri/swayidle.sh" = {
+        source = ./swayidle.sh;
+        executable = true;
+      };
     };
 }

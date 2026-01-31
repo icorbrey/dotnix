@@ -13,8 +13,8 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  inputs.noctalia.url = "github:noctalia-dev/noctalia-shell";
-  inputs.noctalia.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.dms.url = "github:AvengeMedia/DankMaterialShell/stable";
+  inputs.dms.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.nur.url = "github:nix-community/NUR";
 
@@ -64,14 +64,16 @@
     # Personal laptop
     nixosConfigurations."zephyr" = nixpkgs.lib.nixosSystem {
       modules = [
-        inputs.noctalia.nixosModules.default
         ./hosts/zephyr/configuration.nix
         overlayModule
       ];
       inherit system specialArgs;
     };
     homeConfigurations."icorbrey@zephyr" = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/zephyr/home/icorbrey.nix];
+      modules = [
+        inputs.dms.homeModules.dank-material-shell
+        ./hosts/zephyr/home/icorbrey.nix
+      ];
       inherit extraSpecialArgs pkgs;
     };
 

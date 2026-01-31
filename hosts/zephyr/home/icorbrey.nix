@@ -40,7 +40,7 @@
     };
 
     # GUI
-    noctalia.enable = true;
+    dank-material-shell.enable = true;
     obsidian.enable = true;
     discord.enable = true;
     wayland.enable = true;
