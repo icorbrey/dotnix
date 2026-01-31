@@ -129,6 +129,10 @@
             args = ["--stdio"];
           };
 
+          language-server.rust-analyzer = {
+            config.cargo.allFeatures = true;
+          };
+
           language-server.vscode-css-language-server = {
             command = "vscode-css-language-server";
             args = ["--stdio"];
@@ -179,6 +183,11 @@
             })
             (def "markdown" {
               rulers = [81];
+            })
+            (def "rust" {
+              formatter = {
+                command = "rustfmt";
+              };
             })
             (def "sql" {
               indent.tab-width = 4;

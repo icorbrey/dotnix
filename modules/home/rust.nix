@@ -11,6 +11,8 @@
     samply = utils.mkToggle "samply" true;
     bacon = utils.mkToggle "bacon" true;
     gcc = utils.mkToggle "gcc" true;
+    lldb = utils.mkToggle "lldb" true;
+    leptos = utils.mkToggle "leptos" true;
   };
 
   config = let
@@ -22,8 +24,14 @@
           samply = pkgs.samply;
           bacon = pkgs.bacon;
           gcc = pkgs.gcc;
+          lldb = pkgs.lldb;
         })
+        ++ (lib.optionals rust.leptos.enable [
+          pkgs.trunk
+          pkgs.leptosfmt
+        ])
         ++ [
+          pkgs.cargo-nextest
           pkgs.rustup
         ];
     };
