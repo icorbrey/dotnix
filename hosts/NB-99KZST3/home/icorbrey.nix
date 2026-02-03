@@ -40,7 +40,7 @@
         }
         {
           "--when".repositories = ["~/dev/dib"];
-          user.email = "icorbrey@ntserv.doitbestcorp.com";
+          user.email = "isaac.corbrey@doitbest.com";
         }
       ];
 
