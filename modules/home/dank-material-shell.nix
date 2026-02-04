@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   ...
 }: {
   options.modules.home.dank-material-shell = {
@@ -11,18 +12,20 @@
     dms = config.modules.home.dank-material-shell;
     niri = config.modules.home.niri.enable;
   in
-    lib.mkIf dms.enable {
-      programs.dank-material-shell = {
-        enable = true;
-        systemd.enable = true;
-      };
+    lib.mkIf dms.enable (
+      lib.optionalAttrs (lib.hasAttrByPath ["programs" "dank-material-shell"] options) {
+        programs.dank-material-shell = {
+          enable = true;
+          systemd.enable = true;
+        };
 
-      systemd.user.services.dms = lib.mkIf niri {
-        Unit.ConditionEnvironment = [
-          "XDG_CURRENT_DESKTOP=niri"
-          "XDG_SESSION_DESKTOP=niri"
-          "DESKTOP_SESSION=niri"
-        ];
-      };
-    };
+        systemd.user.services.dms = lib.mkIf niri {
+          Unit.ConditionEnvironment = [
+            "XDG_CURRENT_DESKTOP=niri"
+            "XDG_SESSION_DESKTOP=niri"
+            "DESKTOP_SESSION=niri"
+          ];
+        };
+      }
+    );
 }
