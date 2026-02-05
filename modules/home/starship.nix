@@ -33,9 +33,10 @@
           "$os"
           "$username"
           "$directory"
-          "\${custom.jj_change}"
-          "\${custom.jj_conflict}"
           "\${custom.jj_op}"
+          "\${custom.jj_conflict}"
+          "\${custom.jj_diff_added}"
+          "\${custom.jj_diff_removed}"
           "$character"
         ];
         palette = "clarity_noir";
@@ -80,14 +81,25 @@
         directory.truncation_symbol = "…/";
         directory.truncation_length = 3;
 
-        custom.jj_change = {
+        custom.jj_diff_added = {
           ignore_timeout = true;
-          description = "The current jj operation";
-          when = "jj root --ignore-working-copy";
-          command = "jj log -r @ --no-graph --color never -T 'change_id.shortest(1)' --ignore-working-copy";
+          description = "Added lines in the current jj commit";
+          when = "sh -c 'test \"$(jj show -T \"self.diff().stat().total_added()\" --no-patch --ignore-working-copy)\" -ne 0'";
+          command = "jj show -T \"self.diff().stat().total_added()\" --no-patch --ignore-working-copy";
           format = lib.strings.concatStrings [
-            (transition icons.arrow.right "purple")
-            (highlight " ${icons.commit} $output " "purple")
+            (transition icons.arrow.right "green")
+            (highlight " +$output " "green")
+          ];
+        };
+
+        custom.jj_diff_removed = {
+          ignore_timeout = true;
+          description = "Removed lines in the current jj commit";
+          when = "sh -c 'test \"$(jj show -T \"self.diff().stat().total_removed()\" --no-patch --ignore-working-copy)\" -ne 0'";
+          command = "jj show -T \"self.diff().stat().total_removed()\" --no-patch --ignore-working-copy";
+          format = lib.strings.concatStrings [
+            (transition icons.arrow.right "red")
+            (highlight " -$output " "red")
           ];
         };
 
@@ -112,11 +124,16 @@
           ];
         };
 
-        character.success_symbol = "[${icons.arrow.right}](fg:prev_bg bg:none)";
-        character.error_symbol = "[${icons.arrow.right}](fg:prev_bg bg:red)[${icons.arrow.right}](fg:red bg:none)";
+        character.success_symbol = (transition icons.arrow.right "none");
+        character.error_symbol = lib.strings.concatStrings [
+          (transition icons.arrow.right "black")
+          (transition icons.arrow.right "red")
+          (transition icons.arrow.right "none")
+        ];
 
         palettes.clarity_noir = {
           red = "#FF3B11";
+          green = "#2ACD41";
           orange = "#FF9502";
           yellow = "#FFCC00";
           purple = "#B051DE";
