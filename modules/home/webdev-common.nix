@@ -12,6 +12,7 @@
     typescript = utils.mkToggle "typescript" true;
     svelte = utils.mkToggle "svelte" true;
     astro = utils.mkToggle "astro" true;
+    pnpm = utils.mkToggle "pnpm" true;
     fnm = utils.mkToggle "fnm" true;
 
     vue = utils.mkToggle "vue" false;
@@ -27,6 +28,7 @@
           svelte = pkgs.svelte-language-server;
           astro = pkgs.astro-language-server;
           vue = pkgs.vue-language-server;
+          pnpm = pkgs.pnpm;
           fnm = pkgs.fnm;
           typescript = [
             pkgs.typescript-language-server
