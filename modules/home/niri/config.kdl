@@ -230,7 +230,6 @@ focus-ring {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 spawn-sh-at-startup "~/.config/niri/swayidle.sh"
-spawn-sh-at-startup "/home/icorbrey/.nix-profile/bin/dms"
 spawn-sh-at-startup "1password"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:

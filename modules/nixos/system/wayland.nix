@@ -19,5 +19,10 @@
         pkgs.xdg-desktop-portal-wlr
         pkgs.xdg-desktop-portal-gtk
       ];
+      xdg.portal.config = {
+        niri = {
+          default = lib.mkForce ["wlr" "gtk"];
+        };
+      };
     };
 }
