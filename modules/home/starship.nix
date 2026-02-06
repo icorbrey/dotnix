@@ -47,6 +47,7 @@
           (highlight "$symbol" "red")
         ];
         os.symbols = {
+          NixOS = "󱄅";
           Windows = "";
           Ubuntu = "󰕈";
           SUSE = "";
