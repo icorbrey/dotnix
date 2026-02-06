@@ -88,6 +88,7 @@
           when = "sh -c 'test \"$(jj show -T \"self.diff().stat().total_added()\" --no-patch --ignore-working-copy)\" -ne 0'";
           command = "jj show -T \"self.diff().stat().total_added()\" --no-patch --ignore-working-copy";
           format = lib.strings.concatStrings [
+            (transition icons.arrow.right "black")
             (transition icons.arrow.right "green")
             (highlight " +$output " "green")
           ];
@@ -109,6 +110,7 @@
           description = "Whether the current jj worktree has conflicts";
           when = "jj resolve -l --ignore-working-copy";
           format = lib.strings.concatStrings [
+            (transition icons.arrow.right "black")
             (transition icons.arrow.right "red")
             (highlight " ?? " "red")
           ];
@@ -120,6 +122,7 @@
           when = "jj root --ignore-working-copy";
           command = "jj op log -T 'id.short(4)' --limit 1 --no-graph --color never --ignore-working-copy";
           format = lib.strings.concatStrings [
+            (transition icons.arrow.right "black")
             (transition icons.arrow.right "blue")
             (highlight " ${icons.operation} $output " "blue")
           ];
