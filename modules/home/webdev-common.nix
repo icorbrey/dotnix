@@ -14,6 +14,7 @@
     astro = utils.mkToggle "astro" true;
     pnpm = utils.mkToggle "pnpm" true;
     fnm = utils.mkToggle "fnm" true;
+    bun = utils.mkToggle "bun" true;
 
     vue = utils.mkToggle "vue" false;
   };
@@ -30,6 +31,7 @@
           vue = pkgs.vue-language-server;
           pnpm = pkgs.pnpm;
           fnm = pkgs.fnm;
+          bun = pkgs.bun;
           typescript = [
             pkgs.typescript-language-server
             pkgs.typescript
