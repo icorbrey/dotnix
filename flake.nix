@@ -8,6 +8,9 @@
   inputs.helix.url = "github:icorbrey/helix/custom";
   inputs.helix.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.llm-agents.url = "github:numtide/llm-agents.nix";
+  inputs.llm-agents.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
