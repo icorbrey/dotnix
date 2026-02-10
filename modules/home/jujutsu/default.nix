@@ -116,7 +116,7 @@
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
             aliases.restack = ["rebase" "-d" "trunk()" "-s" "mutable_roots()"];
-            aliases.review = ["util" "exec" "tuicr"];
+            aliases.review = ["util" "exec" "--" "tuicr"];
             aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
             aliases.stage = ["stack" "closest_merge(@)+:: ~ empty()"];
             aliases.solve = ["resolve" "--tool" "mergiraf"];
@@ -164,7 +164,7 @@
         };
 
         programs.jujutsu.settings = {
-          aliases.tfvc = ["util" "exec" "nu" "~/.config/jj/scripts/tfvc.nu"];
+          aliases.tfvc = ["util" "exec" "--" "nu" "~/.config/jj/scripts/tfvc.nu"];
           tfvc.url = jujutsu.settings.tfvc.url;
         };
 
