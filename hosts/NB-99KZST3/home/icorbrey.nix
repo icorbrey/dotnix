@@ -34,7 +34,7 @@
     jujutsu.settings = {
       scopes = [
         {
-          "--when".repositories = ["~/dev/forks"];
+          "--when".repositories = ["~/contrib"];
           git.fetch = ["origin" "upstream"];
           git.push = "origin";
         }
