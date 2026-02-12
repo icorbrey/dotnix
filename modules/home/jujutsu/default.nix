@@ -155,6 +155,20 @@
           })
         ];
       }
+      (lib.mkIf config.modules.home.nushell.enable {
+        modules.home.wsl-bridge.map = {
+          "~/.config/jj/scripts/fork.nu" = {
+            directory = {userHome, ...}: "${userHome}/.config/jj/scripts";
+            filename = "fork.nu";
+          };
+        };
+
+        programs.jujutsu.settings = {
+          aliases.fork = ["util" "exec" "--" "nu" "~/.config/jj/scripts/fork.nu"];
+        };
+
+        home.file.".config/jj/scripts/fork.nu".source = ./fork.nu;
+      })
       (lib.mkIf (config.modules.home.nushell.enable && jujutsu.settings.tfvc.enable) {
         modules.home.wsl-bridge.map = {
           "~/.config/jj/scripts/tfvc.nu" = {
