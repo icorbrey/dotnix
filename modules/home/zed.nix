@@ -165,6 +165,12 @@
           };
         }
         {
+          context = "Workspace && !Pane";
+          bindings = {
+            "space f" = "file_finder::Toggle";
+          };
+        }
+        {
           context = "Workspace || Terminal";
           bindings = {
             "alt-f" = "workspace::ToggleZoom";
