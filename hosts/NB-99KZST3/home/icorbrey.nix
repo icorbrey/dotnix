@@ -31,6 +31,10 @@
     helix.enable = true;
     fish.enable = true;
 
+    # GUI cross-compatibility
+    zed.install = false;
+    zed.enable = true;
+
     jujutsu.settings = {
       scopes = [
         {
