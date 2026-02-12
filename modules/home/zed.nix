@@ -133,6 +133,7 @@
           bindings = {
             "ctrl-d" = ["editor::SelectNext" {replace_newest = false;}];
             "ctrl-shift-d" = ["editor::SelectPrevious" {replace_newest = false;}];
+            "ctrl-w" = ["pane::CloseActiveItem" {close_pinned = false;}];
           };
         }
         {
