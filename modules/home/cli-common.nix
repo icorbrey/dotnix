@@ -20,6 +20,7 @@
     zoxide = utils.mkToggle "zoxide" true;
     asciinema = utils.mkToggle "asciinema" true;
     ripgrep = utils.mkToggle "ripgrep" true;
+    nixd = utils.mkToggle "nixd" true;
   };
 
   config = let
@@ -41,6 +42,7 @@
         moon = pkgs.moon;
         vhs = pkgs.vhs;
         ripgrep = pkgs.ripgrep;
+        nixd = pkgs.nixd;
         asciinema = [
           pkgs.asciinema-agg
           pkgs.asciinema
