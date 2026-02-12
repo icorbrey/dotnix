@@ -41,6 +41,7 @@
                 directory,
                 filename,
               }: ''
+                echo "${from} -> ${directory wsl-bridge.paths}/${filename}"
                 if [ -e ${directory wsl-bridge.paths}/${filename} ]; then
                   chmod +w ${directory wsl-bridge.paths}/${filename}
                 fi
