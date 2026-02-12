@@ -27,6 +27,7 @@
     ./webdev-common.nix
     ./wezterm
     ./wsl-bridge.nix
+    ./zed.nix
     ./zellij.nix
   ];
 }
