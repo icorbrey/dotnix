@@ -106,8 +106,8 @@
         "ctrl-alt-j" = ["editor::AddSelectionBelow" {skip_soft_wrap = true;}];
 
         # Move lines.
-        "ctrl-j" = "editor::MoveLineDown";
-        "ctrl-k" = "editor::MoveLineUp";
+        "alt-j" = "editor::MoveLineDown";
+        "alt-k" = "editor::MoveLineUp";
 
         # Buffer navigation.
         "alt-h" = "pane::ActivatePreviousItem";
@@ -133,6 +133,8 @@
           bindings = {
             "ctrl-d" = ["editor::SelectNext" {replace_newest = false;}];
             "ctrl-shift-d" = ["editor::SelectPrevious" {replace_newest = false;}];
+            "alt-j" = "editor::MoveLineDown";
+            "alt-k" = "editor::MoveLineUp";
             "ctrl-w" = ["pane::CloseActiveItem" {close_pinned = false;}];
           };
         }
