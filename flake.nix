@@ -85,5 +85,11 @@
       modules = [./hosts/NB-99KZST3/home/icorbrey.nix];
       inherit extraSpecialArgs pkgs;
     };
+
+    # Lab podium computer
+    homeConfigurations."icorbrey@csusf200" = home-manager.lib.homeManagerConfiguration {
+      modules = [./hosts/csusf200/home/icorbrey.nix];
+      inherit extraSpecialArgs pkgs;
+    };
   };
 }
