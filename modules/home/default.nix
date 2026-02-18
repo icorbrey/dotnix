@@ -29,5 +29,6 @@
     ./wsl-bridge.nix
     ./zed.nix
     ./zellij.nix
+    ./vlc.nix
   ];
 }
