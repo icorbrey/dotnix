@@ -50,6 +50,7 @@
     niri.enable = true;
     tailscale.enable = true;
     zed.enable = true;
+    vlc.enable = true;
 
     # Language support
     webdev-common.enable = true;
