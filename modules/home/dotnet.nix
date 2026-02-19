@@ -15,6 +15,11 @@
       # added when allowInsecure is enabled.
       default = builtins.filter (pkg: pkg != null) [
         (
+          if pkgs ? dotnet-sdk_10
+          then pkgs.dotnet-sdk_10
+          else null
+        )
+        (
           if pkgs ? dotnet-sdk_9
           then pkgs.dotnet-sdk_9
           else null
@@ -26,7 +31,7 @@
         )
       ];
       description = "List of .NET SDK packages to install.";
-      defaultText = "Supported SDKs (8/9 on unstable)";
+      defaultText = "Supported SDKs (8/9/10 on unstable)";
     };
     omnisharp = utils.mkToggle "omnisharp" true;
     allowInsecure = lib.mkOption {
@@ -39,6 +44,11 @@
   config = let
     dotnet = config.modules.home.dotnet;
     allKnownSdkPkgs = builtins.filter (pkg: pkg != null) [
+      (
+        if pkgs ? dotnet-sdk_10
+        then pkgs.dotnet-sdk_10
+        else null
+      )
       (
         if pkgs ? dotnet-sdk_9
         then pkgs.dotnet-sdk_9
