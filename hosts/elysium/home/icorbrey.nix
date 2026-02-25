@@ -31,6 +31,10 @@
     helix.enable = true;
     fish.enable = true;
 
+    # GUI patches
+    zed.enable = true;
+    zed.install = false;
+
     jujutsu.settings = {
       scopes = [
         {
