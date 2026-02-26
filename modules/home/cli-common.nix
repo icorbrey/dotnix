@@ -21,6 +21,7 @@
     asciinema = utils.mkToggle "asciinema" true;
     ripgrep = utils.mkToggle "ripgrep" true;
     nixd = utils.mkToggle "nixd" true;
+    tilt = utils.mkToggle "tilt" true;
   };
 
   config = let
@@ -43,6 +44,7 @@
         vhs = pkgs.vhs;
         ripgrep = pkgs.ripgrep;
         nixd = pkgs.nixd;
+        tilt = pkgs.tilt;
         asciinema = [
           pkgs.asciinema-agg
           pkgs.asciinema
