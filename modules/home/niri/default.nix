@@ -17,6 +17,9 @@
   config = let
     niri = config.modules.home.niri;
     selectedHost = config.modules.home.global.hostName;
+    dmsPluginInclude =
+      config.modules.home.dank-material-shell.enable
+      && config.modules.home.dank-material-shell.plugins.enable;
 
     hostSnippet = let
       candidate =
@@ -33,7 +36,14 @@
     combinedConfig =
       builtins.readFile ./config.kdl
       + lib.optionalString (hostSnippet != null)
-      ("\n\n// Host-specific overrides\n" + builtins.readFile hostSnippet);
+      ("\n\n// Host-specific overrides\n" + builtins.readFile hostSnippet)
+      + lib.optionalString dmsPluginInclude ''
+
+// DMS plugin overrides.
+// Note: pointing device sections in `input` are non-merging, so keep any mouse/touchpad
+// overrides in the included file to avoid conflicts.
+include "dms-input.kdl"
+'';
   in
     lib.mkIf niri.enable {
       home.packages = [

@@ -1,0 +1,13 @@
+{
+  "id": "niriCursorSpeed",
+  "name": "Niri Cursor Speed",
+  "description": "Adjust Niri pointer speed from DMS settings.",
+  "version": "1.0.3",
+  "author": "icorbrey",
+  "icon": "mouse",
+  "type": "daemon",
+  "capabilities": ["input", "pointer-speed"],
+  "component": "./NiriCursorSpeed.qml",
+  "settings": "./NiriCursorSpeedSettings.qml",
+  "permissions": ["settings_read", "settings_write", "process"]
+}
