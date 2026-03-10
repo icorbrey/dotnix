@@ -115,7 +115,7 @@
 
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
-            aliases.restack = ["rebase" "-d" "trunk()" "-s" "mutable_roots()"];
+            aliases.restack = ["rebase" "-d" "trunk()" "-s" "mutable_roots()" "--simplify-parents"];
             aliases.review = ["util" "exec" "--" "tuicr"];
             aliases.stack = ["rebase" "-A" "trunk()" "-B" "closest_merge(@)" "-r"];
             aliases.stage = ["stack" "closest_merge(@)+:: ~ empty()"];
