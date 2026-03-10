@@ -2,9 +2,6 @@
   inputs.auto-cpufreq.url = "github:AdnanHodzic/auto-cpufreq";
   inputs.auto-cpufreq.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.beads.url = "github:steveyegge/beads";
-  inputs.beads.inputs.nixpkgs.follows = "nixpkgs";
-
   inputs.dms.url = "github:AvengeMedia/DankMaterialShell/stable";
   inputs.dms.inputs.nixpkgs.follows = "nixpkgs";
 

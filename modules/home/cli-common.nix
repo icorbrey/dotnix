@@ -15,7 +15,6 @@
     just = utils.mkToggle "just" true;
     moon = utils.mkToggle "moon" true;
     atuin = utils.mkToggle "atuin" true;
-    beads = utils.mkToggle "beads" true;
     codex = utils.mkToggle "codex" true;
     zoxide = utils.mkToggle "zoxide" true;
     asciinema = utils.mkToggle "asciinema" true;
@@ -38,7 +37,6 @@
       };
 
       home.packages = utils.mkIfOptions cli-common {
-        beads = pkgs.beads;
         just = pkgs.just;
         moon = pkgs.moon;
         vhs = pkgs.vhs;
