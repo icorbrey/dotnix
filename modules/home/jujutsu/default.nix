@@ -113,6 +113,11 @@
               "closest_merge(to)" = "heads(::to & merges())";
             };
 
+            fork-owners = {
+              "github.com" = "icorbrey-contrib";
+              "tangled.org" = "isaaccorbrey.com";
+            };
+
             aliases.jj = [];
             aliases.tug = ["bookmark" "move" "--from" "closest_bookmark(@)" "--to" "closest_pushable(@)"];
             aliases.restack = ["rebase" "-d" "trunk()" "-s" "mutable_roots()" "--simplify-parents"];
