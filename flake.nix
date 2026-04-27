@@ -23,24 +23,39 @@
     nixpkgs,
     ...
   } @ inputs: let
-    system = "x86_64-linux";
+    inherit (nixpkgs) lib;
 
-    overlays = import ./overlays.nix {
-      inherit inputs;
+    systems =
+      lib.filter
+      (system: lib.hasSuffix "-linux" system || lib.hasSuffix "-darwin" system)
+      lib.systems.flakeExposed;
+
+    forAllSystems = lib.genAttrs systems;
+
+    overlaysFor = system:
+      import ./overlays.nix {
+        inherit inputs system;
+      };
+
+    nixpkgsModule = system: {
+      nixpkgs = {
+        overlays = overlaysFor system;
+        hostPlatform = lib.mkDefault system;
+
+        config.allowUnfree = true;
+      };
     };
 
-    overlayModule.nixpkgs = {
-      inherit overlays;
-    };
+    pkgsFor = system:
+      import nixpkgs {
+        inherit system;
+        overlays = overlaysFor system;
 
-    pkgs = import nixpkgs {
-      inherit overlays system;
-
-      config.allowUnfree = true;
-    };
+        config.allowUnfree = true;
+      };
 
     utils = import ./utils.nix {
-      inherit (nixpkgs) lib;
+      inherit lib;
     };
 
     specialArgs = {
@@ -50,43 +65,70 @@
     extraSpecialArgs = {
       inherit inputs utils;
     };
+
+    mkHomeConfiguration = {
+      modules,
+      system,
+    }:
+      home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor system;
+        inherit extraSpecialArgs modules;
+      };
+
+    mkNixosConfiguration = {
+      modules,
+      system,
+    }:
+      nixpkgs.lib.nixosSystem {
+        modules =
+          modules
+          ++ [
+            (nixpkgsModule system)
+          ];
+        inherit specialArgs;
+      };
+
+    homeHosts = {
+      "icorbrey@elysium" = {
+        system = "x86_64-linux";
+        modules = [./hosts/elysium/home/icorbrey.nix];
+      };
+
+      "icorbrey@zephyr" = {
+        system = "x86_64-linux";
+        modules = [
+          inputs.dms.homeModules.dank-material-shell
+          ./hosts/zephyr/home/icorbrey.nix
+        ];
+      };
+
+      "icorbrey@NB-99KZST3" = {
+        system = "x86_64-linux";
+        modules = [./hosts/NB-99KZST3/home/icorbrey.nix];
+      };
+
+      "icorbrey@csusf200" = {
+        system = "x86_64-linux";
+        modules = [./hosts/csusf200/home/icorbrey.nix];
+      };
+    };
+
+    nixosHosts = {
+      zephyr = {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/zephyr/configuration.nix
+        ];
+      };
+    };
   in {
-    devShells.${system} = import ./shell.nix {
-      inherit pkgs;
-    };
+    devShells = forAllSystems (system:
+      import ./shell.nix {
+        pkgs = pkgsFor system;
+      });
 
-    # Desktop
-    homeConfigurations."icorbrey@elysium" = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/elysium/home/icorbrey.nix];
-      inherit extraSpecialArgs pkgs;
-    };
+    homeConfigurations = lib.mapAttrs (_: mkHomeConfiguration) homeHosts;
 
-    # Personal laptop
-    nixosConfigurations."zephyr" = nixpkgs.lib.nixosSystem {
-      modules = [
-        ./hosts/zephyr/configuration.nix
-        overlayModule
-      ];
-      inherit system specialArgs;
-    };
-    homeConfigurations."icorbrey@zephyr" = home-manager.lib.homeManagerConfiguration {
-      modules = [
-        inputs.dms.homeModules.dank-material-shell
-        ./hosts/zephyr/home/icorbrey.nix
-      ];
-      inherit extraSpecialArgs pkgs;
-    };
-
-    # Work laptop
-    homeConfigurations."icorbrey@NB-99KZST3" = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/NB-99KZST3/home/icorbrey.nix];
-      inherit extraSpecialArgs pkgs;
-    };
-
-    # Lab podium computer
-    homeConfigurations."icorbrey@csusf200" = home-manager.lib.homeManagerConfiguration {
-      modules = [./hosts/csusf200/home/icorbrey.nix];
-      inherit extraSpecialArgs pkgs;
-    };
+    nixosConfigurations = lib.mapAttrs (_: mkNixosConfiguration) nixosHosts;
   };
 }
