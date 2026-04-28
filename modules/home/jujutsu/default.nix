@@ -87,15 +87,16 @@
                   "isaac@isaaccorbrey.com"
                   "icorbrey@gmail.com"
 
-                  # Do it Best aliases
-                  "icorbrey@ntserv.doitbestcorp.com"
-                  "isaac.corbrey@doitbest.com"
+                  # Sweetwater alias
+                  "isaac_corbrey@sweetwater.com"
 
                   # University of Saint Francis aliases
                   "icorbrey@sf.edu"
 
                   # Historical aliases
+                  "icorbrey@ntserv.doitbestcorp.com"
                   "ICCorbrey01@indianatech.edu"
+                  "isaac.corbrey@doitbest.com"
                   "isaac.corbrey@corebts.com"
                   "icorbrey@apterainc.com"
                 ];
