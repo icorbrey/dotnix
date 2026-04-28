@@ -27,6 +27,7 @@
     wezterm.enable = true;
     helix.enable = true;
     fish.enable = true;
+    zsh.enable = true;
 
     jujutsu.settings = {
       scopes = [

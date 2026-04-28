@@ -29,8 +29,15 @@
       (lib.mkIf (config.modules.home.global.shell == "fish") {
         programs.bash.enable = true;
         programs.bash.initExtra = ''
-          if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]; then
+          if [[ $(${pkgs.procps}/bin/ps -p "$PPID" -o comm=) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]; then
             shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+            exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+          fi
+        '';
+
+        programs.zsh.initContent = lib.mkIf config.modules.home.zsh.enable ''
+          if [[ $(${pkgs.procps}/bin/ps -p "$PPID" -o comm=) != "fish" && -z "''${ZSH_EXECUTION_STRING}" ]]; then
+            [[ -o login ]] && LOGIN_OPTION='--login' || LOGIN_OPTION=""
             exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
           fi
         '';

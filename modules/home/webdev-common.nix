@@ -58,7 +58,7 @@
       })
       (lib.mkIf (config.modules.home.fish.enable && webdev-common.fnm.enable) {
         programs.fish.interactiveShellInit = ''
-          fnm env --use-on-cd --shell fish | source
+          ${pkgs.fnm}/bin/fnm env --use-on-cd --shell fish | source
         '';
       })
     ]);
