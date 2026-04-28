@@ -15,6 +15,7 @@
     ./java.nix
     ./jujutsu
     ./langs-common.nix
+    ./macos.nix
     ./dank-material-shell
     ./niri
     ./nushell.nix

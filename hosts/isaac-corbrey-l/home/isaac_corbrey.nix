@@ -19,6 +19,12 @@
     global.shell = "fish";
     global.editor = "hx";
 
+    macos = {
+      configure = true;
+      mouse.natural = false;
+      touchpad.natural = true;
+    };
+
     # CLI applications
     cli-common.enable = true;
     starship.enable = true;
