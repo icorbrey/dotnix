@@ -102,9 +102,9 @@
         ];
       };
 
-      "icorbrey@NB-99KZST3" = {
-        system = "x86_64-linux";
-        modules = [./hosts/NB-99KZST3/home/icorbrey.nix];
+      "isaac_corbrey@isaac-corbrey-l" = {
+        system = "aarch64-darwin";
+        modules = [./hosts/isaac-corbrey-l/home/isaac_corbrey.nix];
       };
 
       "icorbrey@csusf200" = {

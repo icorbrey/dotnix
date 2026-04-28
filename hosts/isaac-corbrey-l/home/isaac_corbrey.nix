@@ -3,18 +3,12 @@
     ../../../modules/home
   ];
 
-  home.homeDirectory = "/home/icorbrey";
-  home.username = "icorbrey";
+  home.homeDirectory = "/Users/isaac_corbrey";
+  home.username = "isaac_corbrey";
   home.stateVersion = "25.05";
 
   modules.home = {
     home-manager.enable = true;
-    wsl-bridge.enable = true;
-
-    wsl-bridge.paths = {
-      appData = "/mnt/c/Users/icorbrey/AppData/Roaming";
-      userHome = "/mnt/c/Users/icorbrey";
-    };
 
     # Global configuration
     global.shell = "fish";
@@ -22,18 +16,12 @@
 
     # CLI applications
     cli-common.enable = true;
-    carapace.enable = true;
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
     wezterm.enable = true;
-    zellij.enable = true;
     helix.enable = true;
     fish.enable = true;
-
-    # GUI cross-compatibility
-    zed.install = false;
-    zed.enable = true;
 
     jujutsu.settings = {
       scopes = [
@@ -43,16 +31,13 @@
           git.push = "origin";
         }
         {
-          "--when".repositories = ["~/dev/dib"];
-          user.email = "isaac.corbrey@doitbest.com";
+          "--when".repositories = ["~/sweetwater"];
+          user.email = "isaac_corbrey@sweetwater.com";
         }
       ];
 
-      signing.key = "~/.ssh/id_rsa.pub";
+      signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII+dxJbJs2LiS7QAFFtJsFPsntqru8c/7V/3S+DP8H+m";
       signing.enable = true;
-
-      tfvc.enable = true;
-      tfvc.url = "https://dev.azure.com/dibc";
     };
 
     # Language support
