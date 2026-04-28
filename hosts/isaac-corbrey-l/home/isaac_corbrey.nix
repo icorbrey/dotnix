@@ -56,7 +56,6 @@
     webdev-common.enable = true;
     langs-common.enable = true;
     docker.enable = true;
-    dotnet.enable = true;
     java.enable = true;
     rust.enable = true;
   };
