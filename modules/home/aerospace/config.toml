@@ -1,0 +1,114 @@
+config-version = 2
+
+start-at-login = false  # managed by home-manager launchd agent
+
+# Unhide apps automatically so cmd-h can be safely used for focus-left
+automatically-unhide-macos-hidden-apps = true
+
+# Mouse follows focused monitor (mirrors Niri's mouse-follows-focus)
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# Horizontal tiling by default, like Niri's scrollable column layout
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'horizontal'
+
+accordion-padding = 30
+
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+[key-mapping]
+    preset = 'qwerty'
+
+# Mirrors Niri's gaps 8
+[gaps]
+    inner.horizontal = 8
+    inner.vertical   = 8
+    outer.left       = 0
+    outer.bottom     = 0
+    outer.top        = 0
+    outer.right      = 0
+
+[mode.main.binding]
+
+    # Focus (GlazeWM: lwin+arrow)
+    cmd-left  = 'focus left'
+    cmd-down  = 'focus down'
+    cmd-up    = 'focus up'
+    cmd-right = 'focus right'
+
+    # Move window (GlazeWM: lwin+shift+arrow)
+    cmd-shift-left  = 'move left'
+    cmd-shift-down  = 'move down'
+    cmd-shift-up    = 'move up'
+    cmd-shift-right = 'move right'
+
+    # Move workspace to monitor (GlazeWM: lwin+ctrl+left/right)
+    cmd-ctrl-left  = 'move-workspace-to-monitor --wrap-around left'
+    cmd-ctrl-right = 'move-workspace-to-monitor --wrap-around right'
+
+    # Switch workspace (GlazeWM: lwin+1-9)
+    cmd-1 = 'workspace 1'
+    cmd-2 = 'workspace 2'
+    cmd-3 = 'workspace 3'
+    cmd-4 = 'workspace 4'
+    cmd-5 = 'workspace 5'
+    cmd-6 = 'workspace 6'
+    cmd-7 = 'workspace 7'
+    cmd-8 = 'workspace 8'
+    cmd-9 = 'workspace 9'
+
+    # Move window to workspace and follow (GlazeWM: lwin+shift+1-9)
+    cmd-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
+    cmd-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
+    cmd-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
+    cmd-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
+    cmd-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
+    cmd-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
+    cmd-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
+    cmd-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
+    cmd-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
+
+    # Recent workspace (GlazeWM: alt+d)
+    alt-d = 'workspace-back-and-forth'
+
+    # Float toggle (GlazeWM: alt+shift+space)
+    alt-shift-space = 'layout floating tiling'
+
+    # Fullscreen (GlazeWM: lwin+f)
+    cmd-f = 'fullscreen'
+
+    # Enter resize mode (GlazeWM: lwin+r)
+    cmd-r = 'mode resize'
+
+    # Open terminal (GlazeWM: lwin+enter)
+    cmd-enter = '''exec-and-forget open -a WezTerm'''
+
+    # Enter service mode
+    cmd-shift-semicolon = 'mode service'
+
+# Resize mode (GlazeWM: resize binding mode with hjkl/arrows)
+[mode.resize.binding]
+    h     = 'resize width -50'
+    l     = 'resize width +50'
+    k     = 'resize height -50'
+    j     = 'resize height +50'
+    left  = 'resize width -50'
+    right = 'resize width +50'
+    up    = 'resize height -50'
+    down  = 'resize height +50'
+    enter = 'mode main'
+    esc   = 'mode main'
+
+# Service mode: layout resets and window management
+[mode.service.binding]
+    esc       = ['reload-config', 'mode main']
+    r         = ['flatten-workspace-tree', 'mode main']
+    backspace = ['close-all-windows-but-current', 'mode main']
+
+    cmd-shift-left  = ['join-with left', 'mode main']
+    cmd-shift-down  = ['join-with down', 'mode main']
+    cmd-shift-up    = ['join-with up', 'mode main']
+    cmd-shift-right = ['join-with right', 'mode main']

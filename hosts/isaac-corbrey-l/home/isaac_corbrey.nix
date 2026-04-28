@@ -26,6 +26,7 @@
     };
 
     # GUI applications
+    aerospace.enable = true;
     wezterm.enable = true;
 
     # CLI applications
