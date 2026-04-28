@@ -7,7 +7,12 @@ config.font_size = 10.0
 config.color_scheme = "JetBrains Darcula"
 
 config.adjust_window_size_when_changing_font_size = false
-config.window_decorations = "NONE"
+if wezterm.target_triple:find("darwin") then
+  config.window_decorations = "TITLE|RESIZE"
+  config.native_macos_fullscreen_mode = true
+else
+  config.window_decorations = "NONE"
+end
 config.audible_bell = "Disabled"
 
 config.use_fancy_tab_bar = false
