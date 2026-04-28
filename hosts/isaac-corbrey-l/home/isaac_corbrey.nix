@@ -49,6 +49,7 @@
       ];
 
       signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII+dxJbJs2LiS7QAFFtJsFPsntqru8c/7V/3S+DP8H+m";
+      signing.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       signing.enable = true;
     };
 

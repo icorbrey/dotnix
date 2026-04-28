@@ -35,6 +35,11 @@
       key = lib.mkOption {
         type = with lib.types; str;
       };
+
+      program = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+      };
     };
 
     settings.tfvc = {
@@ -149,13 +154,18 @@
               diff-invocation-mode = "file-by-file";
             };
           }
-          (lib.mkIf jujutsu.settings.signing.enable {
-            git.sign-on-push = true;
+          (lib.mkIf jujutsu.settings.signing.enable (lib.mkMerge [
+            {
+              git.sign-on-push = true;
 
-            signing.key = jujutsu.settings.signing.key;
-            signing.behavior = "drop";
-            signing.backend = "ssh";
-          })
+              signing.key = jujutsu.settings.signing.key;
+              signing.behavior = "drop";
+              signing.backend = "ssh";
+            }
+            (lib.mkIf (jujutsu.settings.signing.program != null) {
+              signing.backends.ssh.program = jujutsu.settings.signing.program;
+            })
+          ]))
           (lib.mkIf (jujutsu.settings.scopes != []) {
             "--scope" = jujutsu.settings.scopes;
           })
