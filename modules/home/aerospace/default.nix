@@ -18,7 +18,7 @@ in {
       }
     ];
 
-    home.packages = [pkgs.aerospace];
+    home.packages = [pkgs.aerospace pkgs.autoraise];
 
     home.file.".aerospace.toml".source = ./config.toml;
 
@@ -31,6 +31,18 @@ in {
         LimitLoadToSessionType = "Aqua";
         StandardOutPath = "/tmp/aerospace.out.log";
         StandardErrorPath = "/tmp/aerospace.err.log";
+      };
+    };
+
+    launchd.agents.autoraise = {
+      enable = true;
+      config = {
+        ProgramArguments = ["${pkgs.autoraise}/bin/AutoRaise" "-delay" "0"];
+        KeepAlive = true;
+        ProcessType = "Interactive";
+        LimitLoadToSessionType = "Aqua";
+        StandardOutPath = "/tmp/autoraise.out.log";
+        StandardErrorPath = "/tmp/autoraise.err.log";
       };
     };
   };
