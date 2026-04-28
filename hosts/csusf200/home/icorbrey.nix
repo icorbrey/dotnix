@@ -27,6 +27,7 @@
     jujutsu.enable = true;
     nushell.enable = true;
     wezterm.enable = true;
+    wezterm.install = false;
     zellij.enable = true;
     fish.enable = true;
 
@@ -41,11 +42,11 @@
           git.fetch = ["origin" "upstream"];
           git.push = "origin";
         }
-     ];
+      ];
 
       signing.key = "~/.ssh/id_ed25519.pub";
       signing.enable = true;
-   };
+    };
 
     # Language support
     webdev-common.enable = true;

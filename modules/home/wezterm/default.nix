@@ -5,6 +5,12 @@
 }: {
   options.modules.home.wezterm = {
     enable = lib.mkEnableOption "wezterm";
+
+    install = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to install the WezTerm application via Nix.";
+    };
   };
 
   config = let
@@ -18,9 +24,15 @@
             filename = ".wezterm.lua";
           };
         };
-
-        programs.wezterm.enable = true;
-        programs.wezterm.extraConfig = builtins.readFile ./wezterm.lua;
       }
+      (lib.mkIf wezterm.install {
+        programs.wezterm = {
+          enable = true;
+          extraConfig = builtins.readFile ./wezterm.lua;
+        };
+      })
+      (lib.mkIf (!wezterm.install) {
+        xdg.configFile."wezterm/wezterm.lua".source = ./wezterm.lua;
+      })
     ]);
 }
