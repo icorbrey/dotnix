@@ -7,6 +7,11 @@
   home.username = "isaac_corbrey";
   home.stateVersion = "25.05";
 
+  targets.darwin = {
+    copyApps.enable = true;
+    linkApps.enable = false;
+  };
+
   modules.home = {
     home-manager.enable = true;
 
