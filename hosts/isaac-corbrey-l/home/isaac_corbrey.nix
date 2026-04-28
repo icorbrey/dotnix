@@ -25,12 +25,14 @@
       touchpad.natural = true;
     };
 
+    # GUI applications
+    wezterm.enable = true;
+
     # CLI applications
     cli-common.enable = true;
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
-    wezterm.enable = true;
     helix.enable = true;
     fish.enable = true;
     zsh.enable = true;
