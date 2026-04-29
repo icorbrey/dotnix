@@ -16,7 +16,7 @@
     ./jujutsu
     ./langs-common.nix
     ./aerospace
-    ./macos.nix
+    ./macos
     ./dank-material-shell
     ./niri
     ./nushell.nix

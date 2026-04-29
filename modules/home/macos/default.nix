@@ -10,6 +10,29 @@
     if macos.scrollReverser.package == null
     then macos.scrollReverser.appPath
     else "${macos.scrollReverser.package}/Applications/Scroll Reverser.app";
+
+  keybinds = let
+    mkBind = lib.concatStrings;
+    home = "\\UF729";
+    end = "\\UF72B";
+    bksp = "\\b";
+    del = "\\UF728";
+    ctrl = "^";
+    shift = "$";
+  in ''
+    {
+      "${mkBind [home]}" = "moveToBeginningOfLine:";
+      "${mkBind [end]}" = "moveToEndOfLine:";
+      "${mkBind [shift home]}" = "moveToBeginningOfLineAndModifySelection:";
+      "${mkBind [shift end]}" = "moveToEndOfLineAndModifySelection:";
+      "${mkBind [ctrl home]}" = "moveToBeginningOfDocument:";
+      "${mkBind [ctrl end]}" = "moveToEndOfDocument:";
+      "${mkBind [ctrl shift home]}" = "moveToBeginningOfDocumentAndModifySelection:";
+      "${mkBind [ctrl shift end]}" = "moveToEndOfDocumentAndModifySelection:";
+      "${mkBind [ctrl bksp]}" = "deleteWordBackward:";
+      "${mkBind [ctrl del]}" = "deleteWordForward:";
+    }
+  '';
 in {
   options.modules.home.macos = {
     configure = lib.mkEnableOption "macOS-specific configuration";
@@ -49,6 +72,9 @@ in {
           message = "`modules.home.macos.configure` requires a Darwin host.";
         }
       ];
+
+      home.file."Library/KeyBindings/DefaultKeyBinding.dict".text = keybinds;
+      home.file."Library/Keyboard Layouts/US-Fixed.keylayout".source = ./US-Fixed.keylayout;
 
       targets.darwin.defaults.NSGlobalDomain."com.apple.swipescrolldirection" = macos.touchpad.natural;
 
