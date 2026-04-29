@@ -13,6 +13,7 @@
     svelte = utils.mkToggle "svelte" true;
     astro = utils.mkToggle "astro" true;
     pnpm = utils.mkToggle "pnpm" true;
+    yarn = utils.mkToggle "yarn" true;
     fnm = utils.mkToggle "fnm" true;
     bun = utils.mkToggle "bun" true;
 
@@ -30,6 +31,7 @@
           astro = pkgs.astro-language-server;
           vue = pkgs.vue-language-server;
           pnpm = pkgs.pnpm;
+          yarn = pkgs.yarn;
           fnm = pkgs.fnm;
           bun = pkgs.bun;
           typescript = [
