@@ -12,7 +12,7 @@ install-home user=shell('whoami') hostname=shell('hostname'): _snapshot (_switch
 
 # Read the news.
 news user=shell('whoami') hostname=shell('hostname'):
-    @home-manager news --flake .#{{user}}@{{hostname}}
+    @home-manager news --flake path:.#{{user}}@{{hostname}}
 
 # Update the flake's input and install the current configuration.
 update user=shell('whoami') hostname=shell('hostname'): _update _snapshot (_switch user hostname)
@@ -25,13 +25,13 @@ _switch user hostname: (_switch-nixos hostname) (_switch-home user hostname)
 _switch-nixos hostname:
     @if [ -f hosts/{{hostname}}/configuration.nix ]; then \
         echo "Applying NixOS config for {{hostname}}"; \
-        sudo nixos-rebuild switch --flake .#{{hostname}}; \
+        sudo nixos-rebuild switch --flake path:.#{{hostname}}; \
     fi
 
 # Switch to the Home Manager flake for the given user and hostname.
 _switch-home user hostname:
     @echo "Applying Home Manager config for {{user}}@{{hostname}}"
-    @home-manager switch --flake .#{{user}}@{{hostname}} -b backup
+    @home-manager switch --flake path:.#{{user}}@{{hostname}} -b backup
 
 _update:
     @nix flake update
