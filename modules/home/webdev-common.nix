@@ -22,6 +22,7 @@
 
   config = let
     webdev-common = config.modules.home.webdev-common;
+    pnpmHome = "${config.home.homeDirectory}/.local/share/pnpm";
   in
     lib.mkIf webdev-common.enable (lib.mkMerge [
       {
@@ -40,6 +41,10 @@
           ];
         };
       }
+      (lib.mkIf webdev-common.pnpm.enable {
+        home.sessionVariables.PNPM_HOME = pnpmHome;
+        home.sessionPath = [pnpmHome];
+      })
       (lib.mkIf (config.modules.home.helix.enable && webdev-common.astro.enable) {
         programs.helix.languages.language = [
           {
