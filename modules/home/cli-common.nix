@@ -13,7 +13,6 @@
     vhs = utils.mkToggle "vhs" true;
     htop = utils.mkToggle "htop" true;
     just = utils.mkToggle "just" true;
-    moon = utils.mkToggle "moon" true;
     atuin = utils.mkToggle "atuin" true;
     codex = utils.mkToggle "codex" true;
     zoxide = utils.mkToggle "zoxide" true;
@@ -38,7 +37,6 @@
 
       home.packages = utils.mkIfOptions cli-common {
         just = pkgs.just;
-        moon = pkgs.moon;
         vhs = pkgs.vhs;
         ripgrep = pkgs.ripgrep;
         nixd = pkgs.nixd;
