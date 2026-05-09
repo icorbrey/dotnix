@@ -17,6 +17,10 @@
         programs.fish.interactiveShellInit = ''
           set fish_greeting
           set -gx EDITOR ${config.modules.home.global.editor}
+          fish_add_path ~/.local/bin
+          if test -f ~/.config/fish/local.fish
+            source ~/.config/fish/local.fish
+          end
         '';
         programs.fish.functions.fish_user_key_bindings = ''
           bind \co edit_command_buffer
