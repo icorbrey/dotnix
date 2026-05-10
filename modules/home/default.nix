@@ -10,6 +10,7 @@
     ./flatpak.nix
     ./fonts.nix
     ./global.nix
+    ./go.nix
     ./helix.nix
     ./home-manager.nix
     ./java.nix

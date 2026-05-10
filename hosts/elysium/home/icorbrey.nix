@@ -55,5 +55,6 @@
     dotnet.enable = true;
     docker.enable = true;
     rust.enable = true;
+    go.enable = true;
   };
 }
