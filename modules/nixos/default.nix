@@ -1,11 +1,20 @@
 {
   imports = [
     ./_1password.nix
+    ./argocd.nix
+    ./backups.nix
     ./common.nix
+    ./ddns.nix
     ./docker.nix
     ./firefox.nix
+    ./global.nix
     ./zen-browser.nix
     ./kdeconnect.nix
+    ./knot.nix
+    ./kubernetes.nix
+    ./cnpg.nix
+    ./spindle.nix
+    ./traefik.nix
     ./keymapp.nix
     ./sddm.nix
     ./sessions

@@ -22,6 +22,8 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+  inputs.tangled.url = "git+https://tangled.org/tangled.org/core";
+
   inputs.nur.url = "github:nix-community/NUR";
 
   inputs."zen-browser".url = "github:youwen5/zen-browser-flake";
