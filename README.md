@@ -4,7 +4,7 @@ My Nix configuration. Enter at your own risk.
 
 ```sh
 # Set up the repo
-git clone https://github.com/icorbrey/dotnix ~/.nix
+jj git clone https://tangled.org/isaaccorbrey.com/dotnix ~/.nix
 cd ~/.nix
 nix develop
 
