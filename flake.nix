@@ -2,6 +2,9 @@
   inputs.auto-cpufreq.url = "github:AdnanHodzic/auto-cpufreq";
   inputs.auto-cpufreq.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.claude-code.url = "github:sadjow/claude-code-nix";
+  inputs.claude-code.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.dms.url = "github:AvengeMedia/DankMaterialShell/stable";
   inputs.dms.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -18,8 +21,12 @@
 
   inputs.nur.url = "github:nix-community/NUR";
 
+  inputs."zen-browser".url = "github:youwen5/zen-browser-flake";
+  inputs."zen-browser".inputs.nixpkgs.follows = "nixpkgs";
+
   outputs = {
     home-manager,
+    claude-code,
     nixpkgs,
     ...
   } @ inputs: let

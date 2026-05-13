@@ -34,6 +34,7 @@
     }
     else {};
 in [
+  inputs.claude-code.overlays.default
   inputs.nur.overlays.default
 
   (final: prev:

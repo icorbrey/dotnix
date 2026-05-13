@@ -32,5 +32,6 @@
     kdeconnect.enable = true;
     firefox.enable = true;
     keymapp.enable = true;
+    zen.enable = true;
   };
 }

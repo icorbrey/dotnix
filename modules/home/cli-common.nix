@@ -14,7 +14,7 @@
     htop = utils.mkToggle "htop" true;
     just = utils.mkToggle "just" true;
     atuin = utils.mkToggle "atuin" true;
-    codex = utils.mkToggle "codex" true;
+    claude-code = utils.mkToggle "claude-code" true;
     zoxide = utils.mkToggle "zoxide" true;
     asciinema = utils.mkToggle "asciinema" true;
     ripgrep = utils.mkToggle "ripgrep" true;
@@ -31,7 +31,6 @@
         eza.enable = cli-common.eza.enable;
         htop.enable = cli-common.htop.enable;
         atuin.enable = cli-common.atuin.enable;
-        codex.enable = cli-common.codex.enable;
         zoxide.enable = cli-common.zoxide.enable;
       };
 
@@ -41,6 +40,7 @@
         ripgrep = pkgs.ripgrep;
         nixd = pkgs.nixd;
         tilt = pkgs.tilt;
+        claude-code = pkgs.claude-code;
         asciinema = [
           pkgs.asciinema-agg
           pkgs.asciinema
