@@ -62,7 +62,11 @@ PluginComponent {
 
       if (touchpadOverrideEnabled) {
         var touchpadSpeed = coerceSpeed(rawTouchpadSpeed).toFixed(2)
+        // niri's input device sections are non-merging, so we must re-emit
+        // the base touchpad settings from modules/home/niri/config.kdl here.
         lines.push("    touchpad {")
+        lines.push("        tap")
+        lines.push("        natural-scroll")
         lines.push("        accel-speed " + touchpadSpeed)
         lines.push("    }")
       }
