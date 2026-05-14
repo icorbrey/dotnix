@@ -19,6 +19,7 @@
     # CLI
     cli-common.enable = true;
     carapace.enable = true;
+    opencode.enable = true;
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;

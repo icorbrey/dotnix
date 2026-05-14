@@ -15,8 +15,6 @@
     gum = utils.mkToggle "gum" true;
     just = utils.mkToggle "just" true;
     atuin = utils.mkToggle "atuin" true;
-    claude-code = utils.mkToggle "claude-code" true;
-    opencode = utils.mkToggle "opencode" true;
     zoxide = utils.mkToggle "zoxide" true;
     asciinema = utils.mkToggle "asciinema" true;
     ripgrep = utils.mkToggle "ripgrep" true;
@@ -30,7 +28,7 @@
   in
     lib.mkIf cli-common.enable {
       nixpkgs.config.allowUnfree = true;
-      
+
       programs = {
         bat.enable = cli-common.bat.enable;
         eza.enable = cli-common.eza.enable;
@@ -47,8 +45,6 @@
         nixd = pkgs.nixd;
         tilt = pkgs.tilt;
         libinput = pkgs.libinput;
-        claude-code = pkgs.claude-code;
-        opencode = pkgs.opencode;
         asciinema = [
           pkgs.asciinema-agg
           pkgs.asciinema

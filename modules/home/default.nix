@@ -2,7 +2,9 @@
   imports = [
     ./auto-cpufreq.nix
     ./carapace.nix
+    ./claude-code.nix
     ./cli-common.nix
+    ./datagrip.nix
     ./discord.nix
     ./docker.nix
     ./dotnet.nix
@@ -22,7 +24,9 @@
     ./niri
     ./nushell.nix
     ./obsidian.nix
+    ./opencode.nix
     ./rust.nix
+    ./skills.nix
     ./starship.nix
     ./steam.nix
     ./tailscale.nix

@@ -31,6 +31,7 @@
 
     # CLI applications
     cli-common.enable = true;
+    opencode.enable = true;
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
