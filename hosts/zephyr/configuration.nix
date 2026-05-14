@@ -33,5 +33,8 @@
     firefox.enable = true;
     keymapp.enable = true;
     zen.enable = true;
+
+    docker.enable = true;
+    docker.users = ["icorbrey"];
   };
 }
