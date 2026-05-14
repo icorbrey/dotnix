@@ -55,6 +55,8 @@
   in
     lib.mkIf jujutsu.enable (lib.mkMerge [
       {
+        modules.home.skills.definitions.jujutsu.source = ./skill.md;
+
         modules.home.wsl-bridge.map = {
           "~/.config/jj/config.toml" = {
             directory = {appData, ...}: "${appData}/jj";
@@ -65,7 +67,7 @@
         programs.mergiraf.enable = true;
         programs.jujutsu.enable = true;
         programs.git.enable = true;
-        
+
         programs.mergiraf.enableJujutsuIntegration = true;
         programs.mergiraf.enableGitIntegration = true;
 
