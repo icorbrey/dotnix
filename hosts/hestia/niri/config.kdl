@@ -1,0 +1,9 @@
+// Host-specific overrides for hestia (UTM/QEMU guest).
+// `niri msg outputs` reports this as: Red Hat, Inc. QEMU Monitor Unknown
+// (Virtual-1). EDID's "preferred" mode is 1280x800; pin to UTM's configured
+// display resolution to avoid that.
+output "Virtual-1" {
+    mode "1920x1200@59.885"
+    scale 1.0
+    transform "normal"
+}

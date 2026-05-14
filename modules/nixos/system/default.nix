@@ -9,6 +9,8 @@
     ./networking.nix
     ./power-management.nix
     ./printing.nix
+    ./qemu-guest.nix
+    ./ssh.nix
     ./tailscale.nix
     ./time.nix
     ./wayland.nix

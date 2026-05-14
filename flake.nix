@@ -109,6 +109,14 @@
         ];
       };
 
+      "icorbrey@hestia" = {
+        system = "aarch64-linux";
+        modules = [
+          inputs.dms.homeModules.dank-material-shell
+          ./hosts/hestia/home/icorbrey.nix
+        ];
+      };
+
       "isaac_corbrey@isaac-corbrey-l" = {
         system = "aarch64-darwin";
         modules = [./hosts/isaac-corbrey-l/home/isaac_corbrey.nix];
@@ -125,6 +133,13 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/zephyr/configuration.nix
+        ];
+      };
+
+      hestia = {
+        system = "aarch64-linux";
+        modules = [
+          ./hosts/hestia/configuration.nix
         ];
       };
     };
