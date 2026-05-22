@@ -7,3 +7,9 @@ output "Virtual-1" {
     scale 1.0
     transform "normal"
 }
+
+// Niri doesn't honor XDG autostart, so the per-user spice-vdagent client
+// (needed for clipboard + dynamic resolution + cursor sync between host
+// and guest) won't launch automatically the way it would under Plasma.
+// Spawn it explicitly at session start.
+spawn-at-startup "spice-vdagent"
