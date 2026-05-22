@@ -1,12 +1,9 @@
 // Host-specific overrides for hestia (UTM/QEMU guest).
-// `niri msg outputs` reports this as: Red Hat, Inc. QEMU Monitor Unknown
-// (Virtual-1). EDID's "preferred" mode is 1280x800; pin to UTM's configured
-// display resolution to avoid that.
-output "Virtual-1" {
-    mode "1920x1200@59.885"
-    scale 1.0
-    transform "normal"
-}
+// No `output "Virtual-1"` block here on purpose — UTM's DynamicResolution
+// + spice-vdagent re-advertise the preferred mode and a sensible scale
+// as the UTM window is resized or moved between displays, and any static
+// scale/mode setting would fight that. Use the Mod+- / Mod+= keybinds
+// (defined in the shared niri config) to override scale on demand.
 
 // Niri doesn't honor XDG autostart, so the per-user spice-vdagent client
 // (needed for clipboard + dynamic resolution + cursor sync between host

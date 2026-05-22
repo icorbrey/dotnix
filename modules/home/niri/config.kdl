@@ -322,6 +322,12 @@ binds {
     // shows a list of important hotkeys.
     Mod+Shift+Slash { show-hotkey-overlay; }
 
+    // Output scale presets. Output name is hardcoded for the hestia/UTM
+    // case ("Virtual-1"); on hosts with a different output name these
+    // are harmless no-ops that log a warning.
+    Mod+Minus hotkey-overlay-title="Scale Down: 0.9" { spawn "niri" "msg" "output" "Virtual-1" "scale" "0.9"; }
+    Mod+Equal hotkey-overlay-title="Scale Up: 1.5" { spawn "niri" "msg" "output" "Virtual-1" "scale" "1.5"; }
+
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: wezterm" { spawn "wezterm"; }
     Mod+D hotkey-overlay-title="Run an Application: DMS Spotlight" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
@@ -541,8 +547,9 @@ binds {
     // * adjust width as a percentage of screen width: "-10%" or "+10%"
     // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
     // set-column-width "100" will make the column occupy 200 physical screen pixels.
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
+    // Mod+Minus / Mod+Equal are bound earlier in this file for output scale
+    // presets, not column width. Mod+R cycles column-width presets if you
+    // want quick column resizing without explicit incremental binds.
 
     // Finer height adjustments when in column with other windows.
     Mod+Shift+Minus { set-window-height "-10%"; }
