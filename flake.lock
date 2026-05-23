@@ -122,6 +122,26 @@
         "type": "github"
       }
     },
+    "dsearch": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779380866,
+        "narHash": "sha256-GBQeoW8E0Vdabz4POwXiOg8dtV9/8YDbsp82Bic2QPc=",
+        "owner": "AvengeMedia",
+        "repo": "danksearch",
+        "rev": "db1c8f8c692d0d838393e25f4a2a41404309ff75",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "danksearch",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -327,6 +347,7 @@
         "auto-cpufreq": "auto-cpufreq",
         "claude-code": "claude-code",
         "dms": "dms",
+        "dsearch": "dsearch",
         "helix": "helix",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",

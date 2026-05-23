@@ -8,6 +8,9 @@
   inputs.dms.url = "github:AvengeMedia/DankMaterialShell/stable";
   inputs.dms.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.dsearch.url = "github:AvengeMedia/danksearch";
+  inputs.dsearch.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.helix.url = "github:icorbrey/helix/custom";
   inputs.helix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -100,6 +103,7 @@
         system = "x86_64-linux";
         modules = [
           inputs.dms.homeModules.dank-material-shell
+          inputs.dsearch.homeModules.default
           ./hosts/elysium/home/icorbrey.nix
         ];
       };
@@ -108,6 +112,7 @@
         system = "x86_64-linux";
         modules = [
           inputs.dms.homeModules.dank-material-shell
+          inputs.dsearch.homeModules.default
           ./hosts/zephyr/home/icorbrey.nix
         ];
       };
@@ -116,6 +121,7 @@
         system = "aarch64-linux";
         modules = [
           inputs.dms.homeModules.dank-material-shell
+          inputs.dsearch.homeModules.default
           ./hosts/hestia/home/icorbrey.nix
         ];
       };

@@ -2,6 +2,7 @@
   config,
   lib,
   options,
+  pkgs,
   ...
 }: {
   options.modules.home.dank-material-shell = {
@@ -25,6 +26,14 @@
         programs.dank-material-shell = {
           enable = true;
           systemd.enable = true;
+        };
+
+        # dsearch powers DMS's Files search tab.
+        # We override the package to one with a corrected vendorHash
+        # (upstream's flake.nix ships a stale hash).
+        programs.dsearch = lib.mkIf (lib.hasAttrByPath ["programs" "dsearch"] options) {
+          enable = true;
+          package = pkgs.dsearch;
         };
 
         systemd.user.services.dms = lib.mkIf niri {
