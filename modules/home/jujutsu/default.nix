@@ -65,6 +65,9 @@
         programs.mergiraf.enable = true;
         programs.jujutsu.enable = true;
         programs.git.enable = true;
+        
+        programs.mergiraf.enableJujutsuIntegration = true;
+        programs.mergiraf.enableGitIntegration = true;
 
         home.packages = [
           pkgs.difftastic
