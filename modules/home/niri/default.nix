@@ -50,6 +50,7 @@ include "dms-input.kdl"
         pkgs.xwayland-satellite
         pkgs.wl-clipboard
         pkgs.brightnessctl
+        pkgs.playerctl
         pkgs.swayidle
       ];
 
