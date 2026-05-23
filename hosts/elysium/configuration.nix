@@ -14,6 +14,7 @@
   };
 
   modules.nixos = {
+    system.networking.enable = true;
     system.bluetooth.enable = true;
     system.tailscale.enable = true;
     system.printing.enable = true;
