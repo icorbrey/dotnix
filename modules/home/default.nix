@@ -34,5 +34,6 @@
     ./zellij.nix
     ./zsh.nix
     ./vlc.nix
+    ./wallpaper-engine.nix
   ];
 }
