@@ -56,9 +56,26 @@
       };
     }
     else {};
+  # Override linux-wallpaperengine to pull from 0qln's fork at the tip of
+  # the open PR #557 (Almamu/linux-wallpaperengine), which adds
+  # --screen-span for spanning a single wallpaper across multiple
+  # outputs. Drop this override once the PR lands upstream.
+  linuxWallpaperenginePR557 = final: prev: {
+    linux-wallpaperengine = prev.linux-wallpaperengine.overrideAttrs (old: {
+      version = "0-unstable-pr557-c0f37b1";
+      src = final.fetchFromGitHub {
+        owner = "0qln";
+        repo = "linux-wallpaperengine";
+        rev = "c0f37b1aba30ec4babe08ed114d7e570cef14c08";
+        fetchSubmodules = true;
+        hash = "sha256-XibtF+FuYknsCr4AN4TAiN4kxZaczO9h0g/ZK2SPki4=";
+      };
+    });
+  };
 in [
   inputs.claude-code.overlays.default
   inputs.nur.overlays.default
+  linuxWallpaperenginePR557
 
   (final: prev:
     optionalInputPackage "auto-cpufreq" inputs.auto-cpufreq "default"
