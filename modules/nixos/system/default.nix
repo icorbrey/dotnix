@@ -7,6 +7,7 @@
     ./intel-graphics.nix
     ./i18n.nix
     ./networking.nix
+    ./nvidia.nix
     ./power-management.nix
     ./printing.nix
     ./qemu-guest.nix

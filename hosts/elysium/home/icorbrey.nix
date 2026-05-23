@@ -9,14 +9,9 @@
 
   modules.home = {
     home-manager.enable = true;
-    wsl-bridge.enable = true;
-
-    wsl-bridge.paths = {
-      appData = "/mnt/c/Users/icorbrey/AppData/Roaming";
-      userHome = "/mnt/c/Users/icorbrey";
-    };
 
     # Global configuration
+    global.hostName = "elysium";
     global.shell = "fish";
     global.editor = "hx";
 
@@ -26,15 +21,9 @@
     starship.enable = true;
     jujutsu.enable = true;
     nushell.enable = true;
-    wezterm.enable = true;
-    wezterm.install = false;
     zellij.enable = true;
     helix.enable = true;
     fish.enable = true;
-
-    # GUI patches
-    zed.enable = true;
-    zed.install = false;
 
     jujutsu.settings = {
       scopes = [
@@ -48,6 +37,19 @@
       signing.key = "~/.ssh/id_ed25519.pub";
       signing.enable = true;
     };
+
+    # GUI
+    dank-material-shell.enable = true;
+    obsidian.enable = true;
+    discord.enable = true;
+    wayland.enable = true;
+    wezterm.enable = true;
+    fonts.enable = true;
+    steam.enable = true;
+    niri.enable = true;
+    tailscale.enable = true;
+    zed.enable = true;
+    vlc.enable = true;
 
     # Language support
     webdev-common.enable = true;

@@ -98,7 +98,10 @@
     homeHosts = {
       "icorbrey@elysium" = {
         system = "x86_64-linux";
-        modules = [./hosts/elysium/home/icorbrey.nix];
+        modules = [
+          inputs.dms.homeModules.dank-material-shell
+          ./hosts/elysium/home/icorbrey.nix
+        ];
       };
 
       "icorbrey@zephyr" = {
@@ -129,6 +132,13 @@
     };
 
     nixosHosts = {
+      elysium = {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/elysium/configuration.nix
+        ];
+      };
+
       zephyr = {
         system = "x86_64-linux";
         modules = [

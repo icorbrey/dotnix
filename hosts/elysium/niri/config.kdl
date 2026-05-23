@@ -1,0 +1,20 @@
+// Three 2560x1440 monitors laid out left-to-right at scale 1.0.
+// Output names below are placeholders — confirm with `niri msg outputs`
+// after first boot and rename to match (typical: DP-1/DP-2/DP-3 or HDMI-A-1).
+output "DP-1" {
+    scale 1.0
+    transform "normal"
+    position x=0 y=0
+}
+
+output "DP-2" {
+    scale 1.0
+    transform "normal"
+    position x=2560 y=0
+}
+
+output "DP-3" {
+    scale 1.0
+    transform "normal"
+    position x=5120 y=0
+}
