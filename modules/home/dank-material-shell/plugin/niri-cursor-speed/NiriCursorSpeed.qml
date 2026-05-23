@@ -55,8 +55,11 @@ PluginComponent {
 
       if (mouseOverrideEnabled) {
         var mouseSpeed = coerceSpeed(rawMouseSpeed).toFixed(2)
+        // niri's input device sections are non-merging, so we must re-emit
+        // the base mouse settings from modules/home/niri/config.kdl here.
         lines.push("    mouse {")
         lines.push("        accel-speed " + mouseSpeed)
+        lines.push("        accel-profile \"flat\"")
         lines.push("    }")
       }
 
