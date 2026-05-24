@@ -11,7 +11,7 @@
 #      hardware-configuration.nix is fine — this script overwrites it.
 #
 # Usage:
-#   curl -fsSL <raw-url>/bootstrap.sh | sh
+#   curl -fsSL <raw-url>/bootstrap.sh | sudo sh
 #
 # Env overrides (skip the corresponding prompt):
 #   NIX_HOST=elysium  NIX_USER=icorbrey  REPO_URL=...
@@ -176,7 +176,7 @@ run_quiet() {
 
   if [ "$ret" -ne 0 ]; then
     gum log --level error "$title (exit $ret)"
-    sed 's/\r$//' "$log"
+    sed 's/\r$//' "$log" | gum pager
     rm -f "$log"
     return "$ret"
   fi
@@ -401,38 +401,16 @@ pick_swap_size() {
   esac
 }
 
-detect_boot_disk() {
-  # NixOS installer mounts the live ISO at /iso when booted from removable media.
-  # Trace that back to the parent disk so we can flag it in the disk picker.
-  local src parent
-  src=$(findmnt -no SOURCE /iso 2>/dev/null) || return 0
-  [ -n "$src" ] || return 0
-  parent=$(lsblk -no PKNAME "$src" 2>/dev/null | head -1) || return 0
-  [ -n "$parent" ] && echo "/dev/$parent"
-}
-
 partition_disk() {
   gum style --bold "Disk setup"
 
-  local disk_line disk boot_disk part_prefix swap_gb swap_end boot_part swap_part root_part
-  boot_disk=$(detect_boot_disk)
+  local disk_line disk part_prefix swap_gb swap_end boot_part swap_part root_part
 
   disk_line=$(
     lsblk -d -n -p -o NAME,SIZE,MODEL,TYPE \
-      | awk -v boot="$boot_disk" '$NF=="disk" {
-          sub(/[[:space:]]+disk$/, "");
-          if (boot != "" && $1 == boot) print $0 "  ← booted from this";
-          else print;
-        }' \
       | gum choose --header "Select the target disk (will be wiped):"
   )
   disk=$(echo "$disk_line" | awk '{print $1}')
-
-  if [ -n "$boot_disk" ] && [ "$disk" = "$boot_disk" ]; then
-    gum style --foreground 196 --bold "$disk is the disk you booted from."
-    gum confirm --default=false "Really wipe the installer media?" \
-      || { echo "Aborted."; exit 1; }
-  fi
 
   swap_gb=$(pick_swap_size)
 

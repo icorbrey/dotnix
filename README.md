@@ -20,7 +20,7 @@ just install # or just install <hostname>
 From the NixOS installer ISO:
 
 ```sh
-curl -fsSL https://tangled.org/isaaccorbrey.com/dotnix/raw/main/bootstrap.sh | sh
+curl -fsSL https://tangled.org/isaaccorbrey.com/dotnix/raw/main/bootstrap.sh | sudo sh
 ```
 
 Prompts (via [gum]) for host (queried from the flake's `nixosConfigurations`),
