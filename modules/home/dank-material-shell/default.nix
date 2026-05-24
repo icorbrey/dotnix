@@ -14,12 +14,37 @@
         description = "Whether to install DMS plugins shipped in this repo.";
       };
     };
+
+    hostSettingsFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Optional absolute or relative path to a host-specific DMS settings JSON
+        fragment. Keys in this file are deep-merged into
+        ~/.config/DankMaterialShell/settings.json on activation, overriding any
+        existing values for those keys while preserving keys DMS manages at
+        runtime (theme, wallpaper, etc.).
+      '';
+    };
   };
 
   config = let
     dms = config.modules.home.dank-material-shell;
     niri = config.modules.home.niri.enable;
     enablePlugins = dms.plugins.enable && niri;
+
+    selectedHost = config.modules.home.global.hostName;
+    hostSettings = let
+      candidate =
+        if selectedHost != null
+        then ../../../hosts/${selectedHost}/dank-material-shell/settings.json
+        else null;
+    in
+      if dms.hostSettingsFile != null
+      then dms.hostSettingsFile
+      else if candidate != null && builtins.pathExists candidate
+      then candidate
+      else null;
   in
     lib.mkIf dms.enable (
       lib.optionalAttrs (lib.hasAttrByPath ["programs" "dank-material-shell"] options) {
@@ -68,8 +93,25 @@
           ''
         );
 
-        home.activation.clearDmsPluginQmlCache = lib.mkIf enablePlugins (
+        home.activation.mergeDmsHostSettings = lib.mkIf (hostSettings != null) (
           lib.hm.dag.entryAfter ["writeBoundary"] ''
+            config_dir="''${XDG_CONFIG_HOME:-$HOME/.config}"
+            target="$config_dir/DankMaterialShell/settings.json"
+            override=${lib.escapeShellArg (toString hostSettings)}
+
+            mkdir -p "$(dirname "$target")"
+            if [ ! -f "$target" ] || ! ${pkgs.jq}/bin/jq -e . "$target" >/dev/null 2>&1; then
+              printf '{}\n' > "$target"
+            fi
+
+            tmp="$(mktemp)"
+            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$target" "$override" > "$tmp"
+            mv "$tmp" "$target"
+          ''
+        );
+
+        home.activation.clearDmsPluginQmlCache = lib.mkIf enablePlugins (
+          lib.hm.dag.entryAfter ["writeBoundary" "mergeDmsHostSettings"] ''
             cache_dir="''${XDG_CACHE_HOME:-$HOME/.cache}"
             if command -v systemctl >/dev/null 2>&1; then
               systemctl --user stop dms || true
