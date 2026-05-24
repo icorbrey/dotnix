@@ -18,16 +18,199 @@
 
 set -euo pipefail
 
+# The installer ISO ships with a minimal nix.conf — opt into the
+# experimental features the rest of this script (and the flake) relies on.
+export NIX_CONFIG="experimental-features = nix-command flakes"
+
 REPO_URL=${REPO_URL:-https://tangled.org/isaaccorbrey.com/dotnix}
+
+# ANSI styles, used by run_quiet's spinner/preview and ensure_gum (both run
+# before gum is necessarily available, so they can't use gum styling).
+RESET=$'\033[0m'
+BOLD=$'\033[1m'
+DIM=$'\033[2m'
+MAGENTA=$'\033[35m'
+RED=$'\033[31m'
+
+# run_quiet TITLE -- COMMAND [ARGS...]
+#
+# Runs COMMAND inside a PTY (via util-linux `script`) while showing a spinner
+# and the last PREVIEW_LINES (default 5) of output beneath it. On success the
+# live area collapses to a single styled title line; on failure the full
+# captured output is printed and COMMAND's exit code is returned. Mirrors
+# scripts/run-quiet, but inlined here because the installer doesn't have the
+# repo cloned yet.
+#
+# Depends on gum being on PATH (for the success/failure summary lines), so
+# ensure_gum must be called before any run_quiet invocation.
+run_quiet() {
+  local title=$1
+  shift
+  if [ "${1:-}" != "--" ]; then
+    printf 'run_quiet: expected "--" after TITLE\n' >&2
+    return 2
+  fi
+  shift
+
+  local preview_lines=${PREVIEW_LINES:-5}
+  local log pid=""
+  log=$(mktemp)
+
+  # Sub-shell-safe trap that references the locals above; cleared on success.
+  trap 'if [ -n "${pid:-}" ]; then kill "$pid" 2>/dev/null || :; wait "$pid" 2>/dev/null || :; fi; tput cnorm 2>/dev/null || :; rm -f "$log"' INT TERM
+
+  tput civis 2>/dev/null || true
+
+  local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+  local n_frames=${#frames[@]}
+  local total=$((preview_lines + 1))
+  local back=$((total - 1))
+  local prefix="${DIM}│${RESET} "
+  local prefix_width=2
+
+  # Pull leading sudo (+ its short flags) out so it runs in the caller's real
+  # tty (cache hit) instead of inside the new PTY (where it has no stdin).
+  local sudo_prefix=()
+  if [ "${1:-}" = "sudo" ]; then
+    sudo_prefix+=("$1"); shift
+    while [ $# -gt 0 ] && [[ "${1}" == -* ]]; do
+      sudo_prefix+=("$1"); shift
+    done
+  fi
+
+  local arg cmd_str=""
+  for arg in "$@"; do
+    cmd_str+="$(printf '%q ' "$arg")"
+  done
+
+  # Reserve vertical space and park the cursor at the top of the live area.
+  local i
+  for ((i = 0; i < back; i++)); do echo; done
+  printf '\033[%dA\r' "$back"
+
+  # -q quiet, -e propagate exit status, -f flush each write, -c command,
+  # /dev/null discards the typescript.
+  "${sudo_prefix[@]}" script -qefc "$cmd_str" /dev/null > "$log" 2>&1 &
+  pid=$!
+
+  local frame=0 cols content_cols title_cols spin raw_title title_padded
+  while kill -0 "$pid" 2>/dev/null; do
+    cols=$(tput cols 2>/dev/null || echo 80)
+    content_cols=$((cols - prefix_width))
+    title_cols=$((cols - 2))
+    [ "$content_cols" -lt 1 ] && content_cols=1
+    [ "$title_cols" -lt 1 ] && title_cols=1
+
+    spin=${frames[$((frame % n_frames))]}
+    raw_title=${title:0:title_cols}
+    title_padded=$(printf '%-*s' "$title_cols" "$raw_title")
+    printf '%s%s%s %s%s%s\n' \
+      "$MAGENTA" "$spin" "$RESET" \
+      "$BOLD" "$title_padded" "$RESET"
+
+    # Normalize line endings: strip trailing \r (from CRLF), then convert any
+    # standalone \r (progress-bar updates) to \n.
+    sed 's/\r$//' "$log" | tr '\r' '\n' \
+      | awk -v max="$content_cols" \
+            -v prefix="$prefix" \
+            -v dim="$DIM" \
+            -v reset="$RESET" \
+            -v n="$preview_lines" '
+        function fit(s, m,    out, vis, i, c, len, j, esc) {
+          out = ""; vis = 0; esc = ""
+          len = length(s)
+          for (i = 1; i <= len; i++) {
+            c = substr(s, i, 1)
+            if (esc != "") {
+              esc = esc c
+              if (c ~ /[A-Za-z]/) {
+                if (c == "m") out = out esc dim
+                esc = ""
+              }
+            } else if (c == "\033") {
+              esc = c
+            } else {
+              if (vis >= m) break
+              out = out c; vis++
+            }
+          }
+          for (j = vis; j < m; j++) out = out " "
+          return out
+        }
+        # Skip lines that are empty/whitespace-only after stripping ANSI.
+        {
+          v = $0
+          gsub(/\033\[[0-9;]*[a-zA-Z]/, "", v)
+          if (v ~ /^[[:space:]]*$/) next
+          lines[count++] = $0
+        }
+        END {
+          empty = ""
+          for (j = 0; j < max; j++) empty = empty " "
+          start = count > n ? count - n : 0
+          shown = count - start
+          for (i = 0; i < n; i++) {
+            nl = (i < n - 1 ? "\n" : "")
+            if (i < shown) {
+              printf "%s%s%s%s%s", prefix, dim, fit(lines[start + i], max), reset, nl
+            } else {
+              printf "%s%s%s", prefix, empty, nl
+            }
+          }
+        }
+      '
+
+    printf '\033[%dA\r' "$back"
+    frame=$((frame + 1))
+    sleep 0.1
+  done
+
+  local ret=0
+  wait "$pid" || ret=$?
+  pid=""
+
+  # Wipe the live area, restore the cursor, drop our trap.
+  printf '\r\033[J'
+  tput cnorm 2>/dev/null || true
+  trap - INT TERM
+
+  if [ "$ret" -ne 0 ]; then
+    gum log --level error "$title (exit $ret)"
+    sed 's/\r$//' "$log"
+    rm -f "$log"
+    return "$ret"
+  fi
+
+  gum log --level info "$title"
+  rm -f "$log"
+  return 0
+}
+
+# Ensure gum is on PATH. The installer ISO often ships an older gum (or none
+# at all), so we always pin to nixpkgs#gum — that way prompts, styling, and
+# run_quiet's log output all behave the same everywhere.
+#
+# This runs *before* run_quiet, so we can't use it to show progress here.
+# `nix build` is quiet enough on success that a plain status line is fine.
+ensure_gum() {
+  if command -v gum >/dev/null 2>&1; then
+    return
+  fi
+  printf '%s::%s %sFetching gum from nixpkgs...%s\n' \
+    "$MAGENTA" "$RESET" "$BOLD" "$RESET"
+  local gum_link=/tmp/bootstrap-gum
+  if ! nix build --out-link "$gum_link" nixpkgs#gum; then
+    printf '%sFailed to fetch gum from nixpkgs.%s\n' "$RED" "$RESET" >&2
+    exit 1
+  fi
+  PATH="$gum_link/bin:$PATH"
+}
 
 main() {
   # Reattach stdin to the tty so `curl | sh` doesn't starve gum of input.
   [ -t 0 ] || exec < /dev/tty
 
-  if ! command -v gum >/dev/null 2>&1; then
-    echo "==> Fetching gum..."
-    PATH="$(nix build --no-link --print-out-paths nixpkgs#gum)/bin:$PATH"
-  fi
+  ensure_gum
 
   gum style --bold --foreground 51 "NixOS bootstrap"
 
@@ -59,7 +242,6 @@ main() {
     gum style --foreground 196 "Passwords didn't match — try again."
   done
 
-  gum style --bold "Cloning $REPO_URL → $target"
   mkdir -p "$(dirname "$target")"
   if [ -d "$target/.git" ]; then
     gum style --faint "$target already exists, reusing existing clone."
@@ -67,7 +249,7 @@ main() {
     gum style --foreground 196 "$target exists but isn't a git repo. Aborting."
     exit 1
   else
-    git clone "$REPO_URL" "$target"
+    run_quiet "Cloning $REPO_URL → $target" -- git clone "$REPO_URL" "$target"
   fi
 
   cd "$target"
@@ -77,22 +259,22 @@ main() {
     exit 1
   fi
 
-  gum style --bold "Generating hardware-configuration.nix"
-  nixos-generate-config --root /mnt --show-hardware-config \
-    > "hosts/$host/hardware-configuration.nix"
+  run_quiet "Generating hosts/$host/hardware-configuration.nix" -- \
+    bash -c "nixos-generate-config --root /mnt --show-hardware-config > 'hosts/$host/hardware-configuration.nix'"
 
-  gum style --bold "Installing NixOS"
-  nixos-install --root /mnt --flake "path:.#$host" --no-root-passwd
+  run_quiet "Installing NixOS (#$host)" -- \
+    nixos-install --root /mnt --flake "path:.#$host" --no-root-passwd
 
-  gum style --bold "Setting ownership on /home/$user"
-  nixos-enter --root /mnt --command "chown -R $user:users /home/$user"
+  run_quiet "Setting ownership on /home/$user" -- \
+    nixos-enter --root /mnt --command "chown -R $user:users /home/$user"
 
+  # chpasswd needs stdin, so we can't wrap it through the PTY in run_quiet.
+  # It's near-instant anyway — just run it bare with a header.
   gum style --bold "Setting $user's password"
   printf '%s:%s\n' "$user" "$user_password" \
     | nixos-enter --root /mnt --command 'chpasswd'
   unset user_password user_password2
 
-  gum style --bold "Activating home-manager for $user@$host"
   local hm_script=/mnt/tmp/hm-activate.sh
   cat > "$hm_script" <<HM
 #!/usr/bin/env bash
@@ -112,19 +294,23 @@ done
 su - $user <<'USR'
 set -euo pipefail
 cd /home/$user/.nix
+# The user's profile isn't populated yet, so git isn't on PATH — but nix
+# needs it to read the local flake. Pull it from nixpkgs for this one call.
+PATH="\$(nix build --no-link --print-out-paths nixpkgs#git)/bin:\$PATH"
 act=\$(nix build --no-link --print-out-paths '.#homeConfigurations."$user@$host".activationPackage')
 "\$act/activate"
 USR
 HM
   chmod +x "$hm_script"
-  nixos-enter --root /mnt --command /tmp/hm-activate.sh
+  run_quiet "Activating home-manager for $user@$host" -- \
+    nixos-enter --root /mnt --command /tmp/hm-activate.sh
   rm -f "$hm_script"
 
-  gum style --bold "Initializing jj colocated repo at /home/$user/.nix"
   # Fresh `su -` so PATH picks up jj from the user's home-manager session vars.
   # Idempotent: skip if .jj already exists (re-run scenario).
-  nixos-enter --root /mnt --command \
-    "su - $user -c 'cd ~/.nix && [ -d .jj ] || jj git init --colocate'"
+  run_quiet "Initializing jj colocated repo at /home/$user/.nix" -- \
+    nixos-enter --root /mnt --command \
+      "su - $user -c 'cd ~/.nix && [ -d .jj ] || jj git init --colocate'"
 
   gum style --bold --foreground 46 "Install complete."
   cat <<EOF
@@ -261,7 +447,8 @@ partition_disk() {
 
   swapoff -a 2>/dev/null || true
   umount -R /mnt 2>/dev/null || true
-  wipefs -a -f "$disk"
+
+  run_quiet "Wiping signatures on $disk" -- wipefs -a -f "$disk"
 
   parted -s "$disk" -- mklabel gpt
   parted -s "$disk" -- mkpart ESP fat32 1MiB 1GiB
@@ -283,10 +470,10 @@ partition_disk() {
   partprobe "$disk" || true
   udevadm settle
 
-  mkfs.fat -F 32 "$boot_part"
-  mkfs.ext4 -F "$root_part"
+  run_quiet "Formatting EFI partition ($boot_part)" -- mkfs.fat -F 32 "$boot_part"
+  run_quiet "Formatting root partition ($root_part)" -- mkfs.ext4 -F "$root_part"
   if [ -n "$swap_part" ]; then
-    mkswap "$swap_part"
+    run_quiet "Formatting swap partition ($swap_part)" -- mkswap "$swap_part"
     swapon "$swap_part"
   fi
 
