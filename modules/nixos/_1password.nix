@@ -8,8 +8,10 @@
   };
 
   config = let
-    inherit (config.modules.nixos) _1password firefox;
-    browsers = lib.optional firefox.enable "firefox";
+    inherit (config.modules.nixos) _1password firefox zen;
+    browsers =
+      lib.optional firefox.enable "firefox"
+      ++ lib.optionals zen.enable ["zen" "zen-bin"];
   in
     lib.mkMerge [
       {
