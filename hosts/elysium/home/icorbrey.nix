@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   imports = [
     ../../../modules/home
   ];
@@ -34,7 +34,8 @@
         }
       ];
 
-      signing.key = "~/.ssh/id_ed25519.pub";
+      signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII+dxJbJs2LiS7QAFFtJsFPsntqru8c/7V/3S+DP8H+m";
+      signing.program = "${pkgs._1password-gui}/share/1password/op-ssh-sign";
       signing.enable = true;
     };
 
