@@ -12,6 +12,7 @@
     eza = utils.mkToggle "eza" true;
     vhs = utils.mkToggle "vhs" true;
     htop = utils.mkToggle "htop" true;
+    gum = utils.mkToggle "gum" true;
     just = utils.mkToggle "just" true;
     atuin = utils.mkToggle "atuin" true;
     claude-code = utils.mkToggle "claude-code" true;
@@ -38,6 +39,7 @@
       };
 
       home.packages = utils.mkIfOptions cli-common {
+        gum = pkgs.gum;
         just = pkgs.just;
         vhs = pkgs.vhs;
         ripgrep = pkgs.ripgrep;
