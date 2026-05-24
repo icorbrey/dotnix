@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+# Usage: run-quiet TITLE -- COMMAND [ARGS...]
+#
+# Runs COMMAND while showing a spinner and the last PREVIEW_LINES of output
+# beneath it. On success, the live area is wiped clean. On failure, the
+# full captured output is printed and the command's exit code is returned.
+#
+# The command is run inside a pseudo-TTY (via util-linux `script`) so that
+# tools which disable color when their stdout isn't a terminal still produce
+# colored output.
+#
+# Configure preview height with the PREVIEW_LINES env var (default: 5).
+
+set -euo pipefail
+
+PREVIEW_LINES=${PREVIEW_LINES:-5}
+
+if [[ $# -lt 3 ]]; then
+    echo "Usage: $0 TITLE -- COMMAND [ARGS...]" >&2
+    exit 2
+fi
+
+title="$1"
+shift
+if [[ "${1:-}" != "--" ]]; then
+    echo "Expected '--' after TITLE" >&2
+    exit 2
+fi
+shift
+
+log=$(mktemp)
+pid=""
+cleanup() {
+    if [[ -n "$pid" ]]; then
+        kill "$pid" 2>/dev/null || true
+        wait "$pid" 2>/dev/null || true
+    fi
+    tput cnorm 2>/dev/null || true
+    rm -f "$log"
+}
+trap cleanup EXIT INT TERM
+
+# Hide the cursor while spinning
+tput civis 2>/dev/null || true
+
+frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+n_frames=${#frames[@]}
+total=$((PREVIEW_LINES + 1))
+back=$((total - 1))
+
+# Styles
+RESET=$'\033[0m'
+BOLD=$'\033[1m'
+DIM=$'\033[2m'
+MAGENTA=$'\033[35m'
+
+PREFIX="${DIM}│${RESET} "
+PREFIX_WIDTH=2
+
+# Reserve vertical space and move to the top of the live area
+for ((i = 0; i < back; i++)); do echo; done
+printf '\033[%dA\r' "$back"
+
+# Pull leading sudo (+ its short flags) out of the script -c payload so
+# sudo runs in the user's real tty (cache hit) rather than inside the
+# new PTY (cache miss with no stdin to read a password from).
+sudo_prefix=()
+if [[ "${1:-}" == "sudo" ]]; then
+    sudo_prefix+=("$1"); shift
+    while [[ ${#@} -gt 0 && "${1}" == -* ]]; do
+        sudo_prefix+=("$1"); shift
+    done
+fi
+
+cmd_str=""
+for arg in "$@"; do
+    cmd_str+="$(printf '%q ' "$arg")"
+done
+
+# Run inside a PTY so the command produces colored output.
+#   -q: quiet
+#   -e: return the child's exit status
+#   -f: flush output after each write (for live streaming)
+#   -c: command to run
+#   /dev/null: discard the typescript
+"${sudo_prefix[@]}" script -qefc "$cmd_str" /dev/null > "$log" 2>&1 &
+pid=$!
+
+frame=0
+while kill -0 "$pid" 2>/dev/null; do
+    cols=$(tput cols)
+    content_cols=$((cols - PREFIX_WIDTH))
+    title_cols=$((cols - 2))
+    [ "$content_cols" -lt 1 ] && content_cols=1
+    [ "$title_cols" -lt 1 ] && title_cols=1
+
+    # --- Title line ---
+    spin="${frames[$((frame % n_frames))]}"
+    raw_title="${title:0:title_cols}"
+    title_padded=$(printf '%-*s' "$title_cols" "$raw_title")
+    printf '%s%s%s %s%s%s\n' \
+        "$MAGENTA" "$spin" "$RESET" \
+        "$BOLD" "$title_padded" "$RESET"
+
+    # --- Preview lines ---
+    # Normalize line endings: strip trailing \r (from CRLF), then convert
+    # any standalone \r (progress-bar updates) to \n.
+    sed 's/\r$//' "$log" | tr '\r' '\n' \
+        | awk -v max="$content_cols" \
+              -v prefix="$PREFIX" \
+              -v dim="$DIM" \
+              -v reset="$RESET" \
+              -v n="$PREVIEW_LINES" '
+            function fit(s, m,    out, vis, i, c, len, j, esc) {
+                out = ""; vis = 0; esc = ""
+                len = length(s)
+                for (i = 1; i <= len; i++) {
+                    c = substr(s, i, 1)
+                    if (esc != "") {
+                        esc = esc c
+                        if (c ~ /[A-Za-z]/) {
+                            if (c == "m") out = out esc dim
+                            esc = ""
+                        }
+                    } else if (c == "\033") {
+                        esc = c
+                    } else {
+                        if (vis >= m) break
+                        out = out c; vis++
+                    }
+                }
+                for (j = vis; j < m; j++) out = out " "
+                return out
+            }
+            # Skip lines that are empty/whitespace-only after stripping ANSI.
+            {
+                v = $0
+                gsub(/\033\[[0-9;]*[a-zA-Z]/, "", v)
+                if (v ~ /^[[:space:]]*$/) next
+                lines[count++] = $0
+            }
+            END {
+                empty = ""
+                for (j = 0; j < max; j++) empty = empty " "
+                start = count > n ? count - n : 0
+                shown = count - start
+                for (i = 0; i < n; i++) {
+                    nl = (i < n - 1 ? "\n" : "")
+                    if (i < shown) {
+                        printf "%s%s%s%s%s", prefix, dim, fit(lines[start + i], max), reset, nl
+                    } else {
+                        printf "%s%s%s", prefix, empty, nl
+                    }
+                }
+            }
+        '
+
+    printf '\033[%dA\r' "$back"
+
+    frame=$((frame + 1))
+    sleep 0.1
+done
+
+ret=0
+wait "$pid" || ret=$?
+pid=""
+
+printf '\033[J'
+
+if [ "$ret" -ne 0 ]; then
+    gum log --level error "$title (exit $ret)"
+    sed 's/\r$//' "$log"
+    exit "$ret"
+fi
