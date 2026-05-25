@@ -51,7 +51,7 @@
     wezterm.enable = true;
     fonts.enable = true;
     niri.enable = true;
-    tailscale.enable = true;
+    teams.enable = true;
     zed.enable = true;
     vlc.enable = true;
 

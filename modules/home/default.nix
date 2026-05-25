@@ -26,6 +26,7 @@
     ./starship.nix
     ./steam.nix
     ./tailscale.nix
+    ./teams.nix
     ./wayland.nix
     ./webdev-common.nix
     ./wezterm

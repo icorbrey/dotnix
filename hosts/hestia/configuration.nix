@@ -28,5 +28,6 @@
     _1password.enable = true;
     kdeconnect.enable = true;
     firefox.enable = true;
+    zen.enable = true;
   };
 }

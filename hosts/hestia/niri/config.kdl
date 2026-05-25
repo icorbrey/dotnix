@@ -1,12 +1,6 @@
-// Host-specific overrides for hestia (UTM/QEMU guest).
-// No `output "Virtual-1"` block here on purpose — UTM's DynamicResolution
-// + spice-vdagent re-advertise the preferred mode and a sensible scale
-// as the UTM window is resized or moved between displays, and any static
-// scale/mode setting would fight that. Use the Mod+- / Mod+= keybinds
-// (defined in the shared niri config) to override scale on demand.
-
-// Niri doesn't honor XDG autostart, so the per-user spice-vdagent client
-// (needed for clipboard + dynamic resolution + cursor sync between host
-// and guest) won't launch automatically the way it would under Plasma.
-// Spawn it explicitly at session start.
-spawn-at-startup "spice-vdagent"
+// Host-specific overrides for hestia (Parallels guest).
+// Use the Mod+- / Mod+= keybinds (defined in the shared niri config)
+// to override scale on demand.
+output "Virtual-1" {
+    scale 1.8
+}
