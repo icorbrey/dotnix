@@ -307,18 +307,11 @@ window-rule {
     clip-to-geometry true
 }
 
-// Put DMS's static wallpaper (background-layer Quickshell surface) into the
-// niri overview backdrop. linux-wallpaperengine sits on the bottom layer above
-// this and continues to render inside workspace thumbnails; DMS's wallpaper
-// shows behind/between workspaces in the overview.
-//
-// The matcher is intentionally narrow: only the background-layer surface with
-// namespace "quickshell". DMS's bar, OSDs, etc. use other namespaces (e.g.
-// "dms:bar") and are unaffected. Verify with `niri msg layers` after changes.
-layer-rule {
-    match namespace="^quickshell$" layer="background"
-    place-within-backdrop true
-}
+// NOTE: A layer-rule that places DMS's background-layer Quickshell surface
+// into the niri overview backdrop is appended conditionally from
+// modules/home/niri/default.nix when wallpaper-engine is enabled. Without that
+// rule, DMS's wallpaper renders directly on the desktop (which is the desired
+// behavior on hosts that don't run linux-wallpaperengine).
 
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
