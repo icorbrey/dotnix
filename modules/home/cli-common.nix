@@ -22,6 +22,7 @@
     ripgrep = utils.mkToggle "ripgrep" true;
     nixd = utils.mkToggle "nixd" true;
     tilt = utils.mkToggle "tilt" true;
+    libinput = utils.mkToggle "libinput" true;
   };
 
   config = let
@@ -45,6 +46,7 @@
         ripgrep = pkgs.ripgrep;
         nixd = pkgs.nixd;
         tilt = pkgs.tilt;
+        libinput = pkgs.libinput;
         claude-code = pkgs.claude-code;
         opencode = pkgs.opencode;
         asciinema = [
