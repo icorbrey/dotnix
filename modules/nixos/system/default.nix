@@ -10,7 +10,7 @@
     ./nvidia.nix
     ./power-management.nix
     ./printing.nix
-    ./qemu-guest.nix
+    ./parallels-guest.nix
     ./ssh.nix
     ./tailscale.nix
     ./time.nix

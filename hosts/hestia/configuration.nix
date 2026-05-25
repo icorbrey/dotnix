@@ -14,7 +14,7 @@
   };
 
   modules.nixos = {
-    system.qemu-guest.enable = true;
+    system.parallels-guest.enable = true;
     system.tailscale.enable = true;
     system.wayland.enable = true;
     system.ssh.enable = true;
