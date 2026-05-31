@@ -13,6 +13,7 @@
     ./fonts.nix
     ./global.nix
     ./go.nix
+    ./gtk.nix
     ./helix.nix
     ./home-manager.nix
     ./java.nix

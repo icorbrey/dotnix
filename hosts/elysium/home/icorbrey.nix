@@ -49,6 +49,7 @@
     fonts.enable = true;
     steam.enable = true;
     niri.enable = true;
+    gtk.enable = true;
 
     wallpaper-engine = {
       enable = true;

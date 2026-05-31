@@ -55,6 +55,7 @@
     teams.enable = true;
     zed.enable = true;
     vlc.enable = true;
+    gtk.enable = true;
 
     # Language support
     webdev-common.enable = true;
