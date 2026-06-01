@@ -23,32 +23,19 @@ copy.
 Detect a jj repo by the presence of `.jj/` (e.g. `ls -d .jj`). If it's there, jj
 governs all history.
 
-## Why jj is a force multiplier for an agent specifically
+## Why jj for agents
 
-You are non-interactive, you can't "look at the screen," and you can't recover
-from a destructive action with `Ctrl-Z`. jj's design erases the failure modes
-that normally make an agent timid and slow around VCS:
+Non-interactive agents can't recover from destructive VCS actions. jj eliminates
+the failure modes:
 
-- **You stop spending context on fear.** Because nothing is ever lost and
-  every op is reversible, you can attempt aggressive history surgery (split
-  a 1000-line change into 6 commits, reorder them, reword them) without first
-  constructing elaborate backups. The mental budget you'd spend on "what if this
-  corrupts the branch" goes back into the actual engineering problem.
-- **Mistakes cost one line, not a recovery session.** `jj op restore <id>`
-  rewinds the *entire repo state* — working copy, commits, bookmarks — to any
-  prior point. That turns "I mangled the rebase" from a crisis into a non-event.
-- **No staging dance.** There is no index/staging area to reason about. The
-  working copy *is* a commit (`@`). Edits are auto-snapshotted into `@` on the
-  next `jj` command. You never run `git add`; you never forget to stage a file;
-  you never produce a half-staged commit.
-- **History is malleable, so you can write the messy version first.** Do
-  the work in one big `@`, get it correct and tested, *then* shape it into
-  clean logical commits afterward. You don't have to plan the perfect commit
-  boundaries up front — which you usually can't, because the right structure
-  only becomes clear once the work is done.
-
-The net effect: jj lets you treat history as a thing you *edit* (like code)
-rather than a fragile append-only log you tiptoe around.
+- **Nothing is ever lost.** Every op is reversible. Attempt aggressive history
+  surgery without elaborate backups.
+- **Mistakes cost one line.** `jj op restore <id>` rewinds entire repo state.
+  "Mangled rebase" becomes a non-event.
+- **No staging.** Working copy *is* a commit (`@`). Edits auto-snapshot. Never
+  `git add`, never half-staged commits.
+- **Malleable history.** Do work in one big `@`, test it, *then* shape into
+  clean commits. Right structure emerges after work is done.
 
 ## Core mental model
 
@@ -102,16 +89,9 @@ than reasoning about positions in your head.
 
 ## The squash workflow: overcheckpoint relentlessly
 
-**The single most important habit.** It is *always* easier to squash two commits
-together than to un-stitch two conceptual changes apart in history. Squashing
-is trivial and lossless; un-stitching is the painful manual surgery that the
-"Splitting" and "Within-file separation" sections below exist to handle — work
-you should try hard to never need.
-
-So bias the *other* way: **leave yourself on a clean, empty, nondescript commit
-by `jj new`-ing early and often.** Whenever you reach a good stopping point,
-change tack, finish a logical unit, or are about to try something risky, start a
-fresh commit:
+**The single most important habit.** Squashing commits is trivial; un-stitching
+is painful surgery. Bias toward overchecking: **`jj new` early and often.** At
+each stopping point, change of tack, or before risky work, start fresh:
 
 ```
 jj new # start a fresh empty @ on top of the current work
@@ -124,34 +104,56 @@ jj commit -m "scope: what this change does"
 # identical to:  jj describe -m "..." ; jj new
 ```
 
-**Mark in-flux checkpoints with a `[wip]` prefix.** When a `jj new` is a working
-checkpoint rather than a finished unit, describe it as `[wip] scope: ...`:
+**Mark in-flux checkpoints `[wip]`.** Working checkpoint, not finished unit: `jj
+describe -m "[wip] scope: ..."`. Makes unfinished work obvious in `jj log`. Drop
+`[wip]` when done.
 
-```
-jj describe -m "[wip] liveness: differencing depth term, thresholds untuned"
-```
+Payoff:
+- **Cheap checkpoints** — mistakes only cost work since last `jj new`.
+- **Natural boundaries** — `jj new` at each intent change roughly splits along
+  conceptual lines. Adjacent commits merge with `jj squash`.
+- **No monolithic `@`** — avoids slow, error-prone hand surgery.
 
-This makes it obvious at a glance — in `jj log`, with no branch/bookmark cue to
-rely on — *exactly which commit holds the live, unfinished work* and what state
-it's in. It's a note to whoever picks the work up next about where to resume.
-Drop the `[wip]` (or `jj describe` a real message) once the unit is actually
-done.
+When in doubt, `jj new`. Over-checkpointing is free; under-checkpointing is
+debt.
 
-This is the **squash workflow**, and it's what experienced humans use to keep jj
-simple day-to-day. The payoff for you specifically:
+## Review feedback is fixup, almost always
 
-- **Cheap, frequent checkpoints** mean a mistake only ever costs the work since
-  the last `jj new`, not everything.
-- **Natural commit boundaries fall out for free.** If you `jj new` at each
-  change of intent, your history is *already* roughly split along conceptual
-  lines — and if two adjacent commits turn out to belong together, `jj squash`
-  merges them in one command. You almost never have to do the hard reverse
-  operation.
-- **You never accumulate one monolithic `@`** that later has to be torn apart by
-  hand — a slow, error-prone job whose entire cost the checkpointing avoids.
+A reviewer asking for a rename, a tighter type signature, a doc-comment
+correction, or "use this idiom instead of that one" is not asking for new
+conceptual work — they are refining the commit that introduced the line. Squash
+the change backward into its source commit with `jj squash --into <change>`
+rather than stacking a new "fix the typo" commit on top.
 
-Rule of thumb: when in doubt, `jj new`. Over-checkpointing is free; under-
-checkpointing is a debt you pay back with surgery.
+Stacking is easier in the moment; squashing backward tells the truth about which
+change owned the line. The reviewer's eventual reading of the stack — and the
+project's eventual `git log` / `git blame` — should see one commit per intent,
+not a commit per round of feedback. The principle, worth internalising verbatim:
+*it is way easier to squash than it is to split.* You are almost always one `jj
+squash --into` away from honest history; you are almost never one `jj split`
+away from it.
+
+The discipline:
+
+- **Identify the source commit before you start the edit.** `jj log -r 'mine() &
+  file(<path>)'` (or `jj annotate <path>`) tells you which commit on your stack
+  owns the line you're about to change. Make the edit, then squash it into that
+  commit by id.
+- **One squash per intent, even within a feedback round.** If the reviewer asks
+  for a rename across three commits, do three squashes into three sources, not
+  one squash into the topmost commit.
+- **Stack a new commit only when the feedback genuinely is new work** — an
+  additional test case the reviewer wants, a new code path that didn't exist
+  before. That is additive, not fixup.
+- **Verify the squashed source commit still builds and passes its own tests.**
+  Squashing a fix backward can break the source commit in isolation (e.g. the
+  fix references a helper introduced two commits later). The splitting section's
+  "verify each intermediate commit builds in isolation" rule applies just as
+  much to backward squashes.
+
+The line moves the moment the commit is pushed: published commits cannot be
+rewritten without coordination. Before push, squash freely; after push, follow
+your team's amend-vs-fixup convention.
 
 ## All operations can be restored to and reverted
 
@@ -342,21 +344,14 @@ business on any remote.
 
 ### First-order vs. second-order
 
-- A **first-order megamerge (FOMM)** is the *human's* structural object. Its
-  parents are *publishable* streams — feature branches, in-review PRs, other
-  people's unmerged branches you build against, local setup commits. It is
-  theirs to own and reshape.
-- A **second-order megamerge (SOMM)** is one *you* may build, stacked on top
-  of the FOMM, whose parents are entirely *your own WIP* streams — nothing
-  published yet. Construct one when you have several independent threads of work
-  in flight and want each to stay **independently reviewable** while proving
-  they remain **interoperable** (the same payoff as the FOMM, one level up).
-  Label each stream tip `[wip] scope: …` so the live threads are legible in
-  `jj log`.
+- **FOMM (first-order)** — human's structural object. Parents are publishable
+  streams (feature branches, PRs, others' work). Theirs to own.
+- **SOMM (second-order)** — yours to build, stacked on FOMM. Parents are your
+  own WIP streams. Multiple independent threads staying reviewable while proving
+  interoperability. Label tips `[wip] scope: …`.
 
-Tell them apart by their parents: a FOMM's parents are publishable/tracked
-branches and others' work; a SOMM's are all your own mutable WIP. If a SOMM
-exists, it's the merge *closest* to `@`.
+Tell apart by parents: FOMM has publishable/tracked branches; SOMM has your
+mutable WIP. SOMM is merge closest to `@`.
 
 ### Operating inside one
 
@@ -442,21 +437,21 @@ touches the remote. The remote is the one boundary you don't cross alone.
 You know the commands; these are the entries that carry a *gotcha* or an agent
 *rule* worth not relearning the hard way. For anything else, `jj help`.
 
-| Situation                       | What to actually do                                          |
-| ------------------------------- | ------------------------------------------------------------ |
-| About to do history surgery     | Capture an anchor first: `jj op log --no-graph --limit 1 -T 'id.short()'` |
-| It went wrong                   | `jj op restore <id>` (captured anchor); `jj undo` only for the just-ran op |
-| Targeting a commit              | Use its `change_id` from `jj log`, never `@-`/`@--` positional refs |
-| Checkpoint cadence              | `jj new` early and often; `jj commit -m "..."` to finish-and-advance |
-| In-flux checkpoint              | Prefix the description `[wip] scope: …` so the live work is obvious |
-| Peeling files off a commit      | `jj split <fileset>` leaves them in the *parent*; use `~` to invert |
-| Discard working-copy edits      | `jj restore <path>` — **never** `git checkout`               |
-| Read a file at another revision | `jj file show -r <change> <path>` — write output to a TEMP path, not the live file |
-| Prove a rewrite changed nothing | `jj diff --from <orig> --to <new> --stat` → want "0 files"   |
+| Situation                       | What to actually do                                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| About to do history surgery     | Capture an anchor first: `jj op log --no-graph --limit 1 -T 'id.short()'`                                                      |
+| It went wrong                   | `jj op restore <id>` (captured anchor); `jj undo` only for the just-ran op                                                     |
+| Targeting a commit              | Use its `change_id` from `jj log`, never `@-`/`@--` positional refs                                                            |
+| Checkpoint cadence              | `jj new` early and often; `jj commit -m "..."` to finish-and-advance                                                           |
+| In-flux checkpoint              | Prefix the description `[wip] scope: …` so the live work is obvious                                                            |
+| Peeling files off a commit      | `jj split <fileset>` leaves them in the *parent*; use `~` to invert                                                            |
+| Discard working-copy edits      | `jj restore <path>` — **never** `git checkout`                                                                                 |
+| Read a file at another revision | `jj file show -r <change> <path>` — write output to a TEMP path, not the live file                                             |
+| Prove a rewrite changed nothing | `jj diff --from <orig> --to <new> --stat` → want "0 files"                                                                     |
 | Resolving a conflict            | `jj new <conflicted-id>` → edit markers (`jj resolve --list` to find them, never bare `jj resolve`) → `jj squash` down; repeat |
-| In a megamerge, placing work    | `jj squash --into <change>` (deliberate); not `jj absorb`    |
-| `stack`/`stage`/`restack`       | Governed by the `closest_merge(@)` rule above, not a one-liner |
-| Asked to push                   | Confirm first, every time; permission is per-push, never standing |
+| In a megamerge, placing work    | `jj squash --into <change>` (deliberate); not `jj absorb`                                                                      |
+| `stack`/`stage`/`restack`       | Governed by the `closest_merge(@)` rule above, not a one-liner                                                                 |
+| Asked to push                   | Confirm first, every time; permission is per-push, never standing                                                              |
 
 Two habits carry almost everything else: **`jj new` early and often** so clean
 commit boundaries fall out for free and a mistake is cheap, and **note the op
