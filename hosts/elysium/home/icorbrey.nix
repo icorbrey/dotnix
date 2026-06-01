@@ -9,6 +9,7 @@
 
   modules.home = {
     home-manager.enable = true;
+    tailscale.enable = true;
 
     # Global configuration
     global.hostName = "elysium";
@@ -40,34 +41,35 @@
       signing.enable = true;
     };
 
-    # GUI
+    # Shell
     dank-material-shell.enable = true;
-    obsidian.enable = true;
-    discord.enable = true;
+    wallpaper-engine.enable = true;
     wayland.enable = true;
-    wezterm.enable = true;
     fonts.enable = true;
-    steam.enable = true;
     niri.enable = true;
     gtk.enable = true;
 
-    wallpaper-engine = {
-      enable = true;
-      # Span "Sand dunes" (authored as a 5760x1080 triple-wide scene)
-      # across all three monitors using --screen-span (PR #557).
-      # Requires Wallpaper Engine installed via Steam + the wallpaper
-      # subscribed; linux-wallpaperengine auto-detects WE's assets
-      # folder and the workshop content directory.
-      spanGroups = [
-        {
-          outputs = ["HDMI-A-2" "DP-1" "DP-2"];
-          wallpaper = "2233920230";
-        }
-      ];
-    };
-    tailscale.enable = true;
+    # Span "Sand dunes" (authored as a 5760x1080 triple-wide scene)
+    # across all three monitors using --screen-span (PR #557).
+    # Requires Wallpaper Engine installed via Steam + the wallpaper
+    # subscribed; linux-wallpaperengine auto-detects WE's assets
+    # folder and the workshop content directory.
+    wallpaper-engine.spanGroups = [
+      {
+        outputs = ["HDMI-A-2" "DP-1" "DP-2"];
+        wallpaper = "2233920230";
+      }
+    ];
+
+    # GUI
+    obsidian.enable = true;
+    discord.enable = true;
+    wezterm.enable = true;
     zed.enable = true;
     vlc.enable = true;
+    
+    # Games
+    steam.enable = true;
 
     # Language support
     webdev-common.enable = true;
