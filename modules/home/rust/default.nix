@@ -19,6 +19,8 @@
     rust = config.modules.home.rust;
   in
     lib.mkIf rust.enable {
+      modules.home.skills.definitions.rust.source = ./skill.md;
+
       home.packages =
         (utils.mkIfOptions rust {
           samply = pkgs.samply;
