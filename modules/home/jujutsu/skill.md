@@ -97,16 +97,22 @@ each stopping point, change of tack, or before risky work, start fresh:
 jj new # start a fresh empty @ on top of the current work
 ```
 
-If you're describing the work you just finished and moving on in one motion:
+When finishing work, describe and advance in one motion:
 
 ```
 jj commit -m "scope: what this change does"
 # identical to:  jj describe -m "..." ; jj new
 ```
 
-**Mark in-flux checkpoints `[wip]`.** Working checkpoint, not finished unit: `jj
-describe -m "[wip] scope: ..."`. Makes unfinished work obvious in `jj log`. Drop
-`[wip]` when done.
+**Always land on an empty `@` after completing work.** If you've just shaped
+commits (splitting, describing, reordering), the last step is `jj new` to leave
+yourself on a clean checkpoint. An agent that finishes work still sitting on the
+final described commit is violating the squash workflow — you should be *ahead*
+of the finished work, not sitting on it.
+
+**Mark in-flux checkpoints `[wip]`.** Working checkpoint, not finished unit:
+`jj describe -m "[wip] scope: ..."`. Makes unfinished work obvious in `jj log`.
+Drop `[wip]` when done.
 
 Payoff:
 - **Cheap checkpoints** — mistakes only cost work since last `jj new`.
@@ -116,6 +122,22 @@ Payoff:
 
 When in doubt, `jj new`. Over-checkpointing is free; under-checkpointing is
 debt.
+
+## Consolidate mutable commits, don't stack fixups
+
+When you realize a just-made commit needs refinement (typo fix, wrapping,
+missed file, better wording), squash the fix back into the source commit with
+`jj squash --into <change>` rather than creating a new commit on top. The
+source commit is still mutable (unpublished), so the refinement belongs *in* it,
+not after it.
+
+Agent failure mode: after creating commit A, immediately realizing it needs a
+small fix, then creating commit B "fix A" on top. This creates churn commits.
+The right move: make the fix in `@`, then `jj squash --into <A's change id>`.
+
+Applies equally to formatting fixes, typos in commit messages (use `jj describe
+<change>`), or "oops, forgot to include this file." If the work is still in your
+mutable stack and the fix refines rather than extends, consolidate it backward.
 
 ## Review feedback is fixup, almost always
 
@@ -443,6 +465,8 @@ You know the commands; these are the entries that carry a *gotcha* or an agent
 | It went wrong                   | `jj op restore <id>` (captured anchor); `jj undo` only for the just-ran op                                                     |
 | Targeting a commit              | Use its `change_id` from `jj log`, never `@-`/`@--` positional refs                                                            |
 | Checkpoint cadence              | `jj new` early and often; `jj commit -m "..."` to finish-and-advance                                                           |
+| Just finished shaping commits   | `jj new` to land on empty `@` ahead of the work — don't sit on the final commit                                                |
+| Just-made commit needs a fix    | `jj squash --into <change>` to consolidate; don't stack "fix commit A" on top                                                  |
 | In-flux checkpoint              | Prefix the description `[wip] scope: …` so the live work is obvious                                                            |
 | Peeling files off a commit      | `jj split <fileset>` leaves them in the *parent*; use `~` to invert                                                            |
 | Discard working-copy edits      | `jj restore <path>` — **never** `git checkout`                                                                                 |
