@@ -26,8 +26,8 @@
     ./nushell.nix
     ./obsidian.nix
     ./opencode.nix
-    ./rust.nix
-    ./skills.nix
+    ./rust
+    ./skills
     ./starship.nix
     ./steam.nix
     ./tailscale.nix
